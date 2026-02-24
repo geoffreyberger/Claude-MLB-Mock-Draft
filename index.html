@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>2026 MLB Draft — Mock Draft Board</title>
+<title>2026 Mock Draft Board</title>
 <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Serif+Display:ital@0;1&family=JetBrains+Mono:wght@400;600;700&family=Instrument+Sans:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
 <style>
   :root {
@@ -15,6 +15,9 @@
     --card:  #0f1e32;
     --border:#1a2e48;
     --teal:  #3ecfc6;
+    --green: #2db34f;
+    --orange:#e07b30;
+    --purple:#9b72cf;
   }
   *, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
   body { background:var(--midnight); color:var(--cream); font-family:'Instrument Sans',sans-serif; min-height:100vh; overflow-x:hidden; }
@@ -22,102 +25,202 @@
     content:''; position:fixed; inset:0; z-index:200; pointer-events:none;
     background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E"); opacity:.45;
   }
-
-  header { position:relative; padding:64px 48px 52px; border-bottom:1px solid var(--border); overflow:hidden; }
-  header::after { content:'2026'; position:absolute; right:-10px; top:-24px; font-family:'Bebas Neue',sans-serif; font-size:clamp(150px,22vw,300px); color:rgba(200,16,46,0.055); line-height:1; pointer-events:none; letter-spacing:-4px; }
-  .eyebrow { font-family:'JetBrains Mono',monospace; font-size:10px; letter-spacing:4px; text-transform:uppercase; color:var(--red); margin-bottom:18px; display:flex; align-items:center; gap:10px; }
-  .eyebrow::before { content:''; display:block; width:24px; height:1px; background:var(--red); }
-  h1 { font-family:'Bebas Neue',sans-serif; font-size:clamp(60px,9vw,110px); line-height:.88; letter-spacing:2px; background:linear-gradient(130deg,var(--cream) 55%,var(--gold) 100%); -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text; }
-  .header-sub { font-family:'DM Serif Display',serif; font-style:italic; font-size:17px; color:var(--muted); margin-top:14px; }
-  .header-meta { display:flex; flex-wrap:wrap; gap:36px; margin-top:32px; }
-  .meta-item { font-family:'JetBrains Mono',monospace; font-size:10px; color:var(--muted); letter-spacing:1.5px; text-transform:uppercase; }
-  .meta-item span { display:block; color:var(--gold); font-size:14px; font-weight:700; margin-top:4px; letter-spacing:0; }
-
+  /* ── TAB NAV ── */
+  .tab-nav { position:sticky; top:0; z-index:300; display:flex; border-bottom:1px solid var(--border); background:rgba(6,16,30,0.97); backdrop-filter:blur(12px); }
+  .tab-btn { flex:1; max-width:280px; display:flex; align-items:center; justify-content:center; gap:10px; padding:16px 24px; font-family:'JetBrains Mono',monospace; font-size:11px; letter-spacing:2.5px; text-transform:uppercase; color:var(--muted); border:none; background:none; cursor:pointer; border-bottom:2px solid transparent; transition:color .2s, border-color .2s; }
+  .tab-btn:hover { color:var(--cream); }
+  .tab-btn.active[data-sport="mlb"] { color:var(--red); border-bottom-color:var(--red); }
+  .tab-btn.active[data-sport="nfl"] { color:var(--green); border-bottom-color:var(--green); }
+  .tab-sport { font-family:'Bebas Neue',sans-serif; font-size:22px; letter-spacing:1px; line-height:1; }
+  /* ── PANELS ── */
+  .sport-panel { display:none; }
+  .sport-panel.visible { display:block; }
+  /* ── HEADERS ── */
+  header { position:relative; padding:52px 48px 44px; border-bottom:1px solid var(--border); overflow:hidden; }
+  .mlb-header::after { content:'2026'; position:absolute; right:-10px; top:-24px; font-family:'Bebas Neue',sans-serif; font-size:clamp(150px,22vw,300px); color:rgba(200,16,46,0.055); line-height:1; pointer-events:none; letter-spacing:-4px; }
+  .nfl-header::after { content:'2026'; position:absolute; right:-10px; top:-24px; font-family:'Bebas Neue',sans-serif; font-size:clamp(150px,22vw,300px); color:rgba(45,179,79,0.05); line-height:1; pointer-events:none; letter-spacing:-4px; }
+  .mlb-title { font-family:'Bebas Neue',sans-serif; font-size:clamp(60px,9vw,110px); line-height:.88; letter-spacing:2px; background:linear-gradient(130deg,var(--cream) 55%,var(--gold) 100%); -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text; text-align:center; }
+  .nfl-title { font-family:'Bebas Neue',sans-serif; font-size:clamp(60px,9vw,110px); line-height:.88; letter-spacing:2px; background:linear-gradient(130deg,var(--cream) 55%,var(--green) 100%); -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text; text-align:center; }
+  /* ── DRAFT BOARD ── */
   .draft-board { padding:24px 48px 60px; max-width:1360px; margin:0 auto; }
-
   .round-header { display:flex; align-items:flex-start; gap:16px; padding:36px 0 14px; margin-top:8px; }
   .round-label { font-family:'Bebas Neue',sans-serif; font-size:22px; letter-spacing:2px; white-space:nowrap; flex-shrink:0; }
   .round-label.r1   { color:var(--red); }
   .round-label.rppi { color:var(--teal); }
   .round-label.rcba { color:var(--gold); }
+  .round-label.nfl-r1 { color:var(--green); }
   .round-line { width:1px; background:var(--border); align-self:stretch; flex-shrink:0; margin:4px 0; }
-  .round-note { font-family:'JetBrains Mono',monospace; font-size:9px; color:var(--muted); letter-spacing:.5px; line-height:1.65; padding-top:5px; }
-
+  /* ── PICK CARDS ── */
   .pick { position:relative; overflow:hidden; background:var(--card); border:1px solid transparent; border-radius:4px; margin-bottom:6px; animation:fadeSlide .4s both; transition:border-color .2s, background .2s, transform .18s; }
   .pick::before { content:''; position:absolute; left:0; top:0; bottom:0; width:3px; background:var(--border); transition:background .2s; }
   .pick:hover { border-color:var(--border); background:#132038; transform:translateX(3px); }
-  .pick:hover::before { background:var(--red); }
-  .pick.top-pick { background:linear-gradient(100deg,#142440,var(--card) 60%); }
-  .pick.ppi-pick { background:linear-gradient(100deg,#071a1a,var(--card) 70%); }
-  .pick.ppi-pick::before { background:rgba(62,207,198,.4) !important; }
-  .pick.ppi-pick:hover::before { background:var(--teal) !important; }
-  .pick.cb-pick  { background:linear-gradient(100deg,#1b1508,var(--card) 70%); }
-  .pick.cb-pick::before  { background:rgba(212,168,71,.4) !important; }
-  .pick.cb-pick:hover::before  { background:var(--gold) !important; }
-
+  .mlb-panel .pick:hover::before { background:var(--red); }
+  .mlb-panel .pick.top-pick  { background:linear-gradient(100deg,#142440,var(--card) 60%); }
+  .mlb-panel .pick.r1-pick   { background:linear-gradient(100deg,#1a0a0e,var(--card) 70%); }
+  .mlb-panel .pick.r1-pick::before  { background:rgba(200,16,46,.4) !important; }
+  .mlb-panel .pick.r1-pick:hover::before { background:var(--red) !important; }
+  .mlb-panel .pick.ppi-pick  { background:linear-gradient(100deg,#071a1a,var(--card) 70%); }
+  .mlb-panel .pick.ppi-pick::before { background:rgba(62,207,198,.4) !important; }
+  .mlb-panel .pick.ppi-pick:hover::before { background:var(--teal) !important; }
+  .mlb-panel .pick.cb-pick   { background:linear-gradient(100deg,#1b1508,var(--card) 70%); }
+  .mlb-panel .pick.cb-pick::before  { background:rgba(212,168,71,.4) !important; }
+  .mlb-panel .pick.cb-pick:hover::before  { background:var(--gold) !important; }
+  .nfl-panel .pick:hover::before { background:var(--green); }
+  .nfl-panel .pick.top-pick  { background:linear-gradient(100deg,#0d2018,var(--card) 60%); }
+  .nfl-panel .pick.top-pick::before { background:rgba(45,179,79,.5) !important; }
+  .nfl-panel .pick.top-pick:hover::before { background:var(--green) !important; }
   .pick-header { display:grid; grid-template-columns:64px 1fr 200px 80px 56px; gap:14px; align-items:center; padding:16px 20px 14px; cursor:pointer; user-select:none; }
-  .pick-num { font-family:'Bebas Neue',sans-serif; font-size:30px; color:var(--red); line-height:1; }
-  .ppi-pick .pick-num { color:var(--teal); font-size:18px; letter-spacing:1px; }
-  .cb-pick  .pick-num { color:var(--gold); font-size:18px; letter-spacing:1px; }
-  .top-pick .pick-num { font-size:38px; }
+  .pick-num { font-family:'Bebas Neue',sans-serif; font-size:30px; line-height:1; }
+  .mlb-panel .pick-num  { color:var(--red); }
+  .mlb-panel .ppi-pick .pick-num { color:var(--teal); font-size:18px; letter-spacing:1px; }
+  .mlb-panel .cb-pick  .pick-num { color:var(--gold); font-size:18px; letter-spacing:1px; }
+  .mlb-panel .top-pick .pick-num { font-size:38px; }
+  .nfl-panel  .pick-num  { color:var(--green); }
+  .nfl-panel  .top-pick .pick-num { font-size:38px; }
   .player-name { font-family:'DM Serif Display',serif; font-size:18px; color:var(--cream); line-height:1.15; }
   .player-meta { font-family:'JetBrains Mono',monospace; font-size:10px; color:var(--muted); letter-spacing:1px; text-transform:uppercase; margin-top:3px; }
-  .team-cell { font-family:'Instrument Sans',sans-serif; font-size:13px; font-weight:600; color:var(--cream); line-height:1.3; }
+  .team-cell { font-family:'Instrument Sans',sans-serif; font-size:13px; font-weight:600; color:var(--cream); line-height:1.3; text-align:right; }
   .position { display:inline-flex; align-items:center; justify-content:center; width:42px; height:42px; border-radius:50%; font-family:'Bebas Neue',sans-serif; font-size:13px; letter-spacing:1px; }
-  .pos-P  { background:rgba(200,16,46,.14);  color:var(--red);  border:1px solid rgba(200,16,46,.3); }
-  .pos-C  { background:rgba(212,168,71,.12); color:var(--gold); border:1px solid rgba(212,168,71,.3); }
-  .pos-IF { background:rgba(90,155,255,.1);  color:#7ab3ff;     border:1px solid rgba(90,155,255,.25); }
-  .pos-OF { background:rgba(72,195,110,.1);  color:#6bda92;     border:1px solid rgba(72,195,110,.25); }
-
+  .pos-P  { background:rgba(200,16,46,.14);  color:var(--red);    border:1px solid rgba(200,16,46,.3); }
+  .pos-C  { background:rgba(212,168,71,.12); color:var(--gold);   border:1px solid rgba(212,168,71,.3); }
+  .pos-IF { background:rgba(90,155,255,.1);  color:#7ab3ff;       border:1px solid rgba(90,155,255,.25); }
+  .pos-OF { background:rgba(72,195,110,.1);  color:#6bda92;       border:1px solid rgba(72,195,110,.25); }
+  .pos-QB   { background:rgba(200,16,46,.14);  color:var(--red);    border:1px solid rgba(200,16,46,.3); }
+  .pos-RB   { background:rgba(45,179,79,.12);  color:var(--green);  border:1px solid rgba(45,179,79,.3); }
+  .pos-WR   { background:rgba(90,155,255,.1);  color:#7ab3ff;       border:1px solid rgba(90,155,255,.25); }
+  .pos-TE   { background:rgba(62,207,198,.1);  color:var(--teal);   border:1px solid rgba(62,207,198,.25); }
+  .pos-OL   { background:rgba(212,168,71,.12); color:var(--gold);   border:1px solid rgba(212,168,71,.3); }
+  .pos-EDGE { background:rgba(224,123,48,.12); color:var(--orange); border:1px solid rgba(224,123,48,.3); }
+  .pos-DT   { background:rgba(155,114,207,.12);color:var(--purple); border:1px solid rgba(155,114,207,.3); }
+  .pos-LB   { background:rgba(255,210,80,.1);  color:#f5d060;       border:1px solid rgba(255,210,80,.25); }
+  .pos-CB   { background:rgba(255,120,180,.1); color:#f08abd;       border:1px solid rgba(255,120,180,.25); }
+  .pos-S    { background:rgba(62,207,198,.1);  color:var(--teal);   border:1px solid rgba(62,207,198,.25); }
   .toggle-arrow { width:28px; height:28px; display:flex; align-items:center; justify-content:center; border-radius:50%; border:1px solid var(--border); color:var(--muted); font-size:11px; transition:transform .25s, border-color .2s, color .2s; margin-left:auto; flex-shrink:0; }
-  .pick.open .toggle-arrow { transform:rotate(180deg); border-color:var(--red); color:var(--red); }
-
+  .mlb-panel .pick.open .toggle-arrow { transform:rotate(180deg); border-color:var(--red);   color:var(--red); }
+  .nfl-panel  .pick.open .toggle-arrow { transform:rotate(180deg); border-color:var(--green); color:var(--green); }
   .write-up-panel { max-height:0; overflow:hidden; transition:max-height .38s cubic-bezier(.4,0,.2,1); }
-  .pick.open .write-up-panel { max-height:800px; }
   .write-up-inner { padding:16px 24px 22px 84px; border-top:1px solid var(--border); }
   .write-up-inner p { font-family:'Instrument Sans',sans-serif; font-size:13.5px; line-height:1.78; color:#a8bcd2; max-width:820px; }
   .write-up-inner p + p { margin-top:12px; }
   .write-up-inner em { color:var(--cream); font-style:italic; }
-  .source-tag { display:inline-block; margin-top:14px; font-family:'JetBrains Mono',monospace; font-size:9px; letter-spacing:1.5px; text-transform:uppercase; color:var(--muted); border:1px solid var(--border); border-radius:2px; padding:2px 7px; }
-
   @keyframes fadeSlide { from{opacity:0;transform:translateY(10px)} to{opacity:1;transform:translateY(0)} }
-
   footer { border-top:1px solid var(--border); padding:28px 48px; display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:14px; }
   footer p { font-family:'JetBrains Mono',monospace; font-size:10px; color:var(--muted); letter-spacing:1px; }
   .legend { display:flex; gap:18px; flex-wrap:wrap; }
   .legend-item { display:flex; align-items:center; gap:6px; font-family:'JetBrains Mono',monospace; font-size:9px; color:var(--muted); text-transform:uppercase; letter-spacing:1px; }
   .legend-dot { width:9px; height:9px; border-radius:50%; }
-
   @media (max-width:900px) {
-    header,.draft-board,footer { padding-left:20px; padding-right:20px; }
+    header, .draft-board, footer { padding-left:20px; padding-right:20px; }
     .pick-header { grid-template-columns:52px 1fr auto auto; }
-    .team-cell { display:none; }
     .write-up-inner { padding-left:20px; }
   }
 </style>
 </head>
 <body>
-<header>
-  <h1 style="text-align:center;">Mock<br>2026 MLB<br>Draft</h1>
-</header>
 
-<div class="draft-board" id="board"></div>
+<nav class="tab-nav">
+  <button class="tab-btn active" data-sport="mlb">
+    <span class="tab-sport">MLB</span>
+    <span>Mock Draft</span>
+  </button>
+  <button class="tab-btn" data-sport="nfl">
+    <span class="tab-sport">NFL</span>
+    <span>Mock Draft</span>
+  </button>
+</nav>
 
-<footer>
-  <p>© 2026 Mock Draft Board — Projections only. Not affiliated with MLB.</p>
-  <div class="legend">
-    <div class="legend-item"><div class="legend-dot" style="background:var(--red)"></div>Pitcher</div>
-    <div class="legend-item"><div class="legend-dot" style="background:var(--gold)"></div>Catcher</div>
-    <div class="legend-item"><div class="legend-dot" style="background:#7ab3ff"></div>Infield</div>
-    <div class="legend-item"><div class="legend-dot" style="background:#6bda92"></div>Outfield</div>
-  </div>
-</footer>
+<div class="sport-panel mlb-panel visible" id="panel-mlb">
+  <header class="mlb-header">
+    <h1 class="mlb-title">Mock<br>2026 MLB<br>Draft</h1>
+  </header>
+  <div class="draft-board" id="mlb-board"></div>
+  <footer>
+    <p>&#169; 2026 Mock Draft Board &#8212; Projections only. Not affiliated with MLB.</p>
+    <div class="legend">
+      <div class="legend-item"><div class="legend-dot" style="background:var(--red)"></div>Pitcher</div>
+      <div class="legend-item"><div class="legend-dot" style="background:var(--gold)"></div>Catcher</div>
+      <div class="legend-item"><div class="legend-dot" style="background:#7ab3ff"></div>Infield</div>
+      <div class="legend-item"><div class="legend-dot" style="background:#6bda92"></div>Outfield</div>
+    </div>
+  </footer>
+</div>
+
+<div class="sport-panel nfl-panel" id="panel-nfl">
+  <header class="nfl-header">
+    <h1 class="nfl-title">Mock<br>2026 NFL<br>Draft</h1>
+  </header>
+  <div class="draft-board" id="nfl-board"></div>
+  <footer>
+    <p>&#169; 2026 Mock Draft Board &#8212; Projections only. Not affiliated with NFL.</p>
+    <div class="legend">
+      <div class="legend-item"><div class="legend-dot" style="background:var(--red)"></div>QB</div>
+      <div class="legend-item"><div class="legend-dot" style="background:var(--green)"></div>RB</div>
+      <div class="legend-item"><div class="legend-dot" style="background:#7ab3ff"></div>WR</div>
+      <div class="legend-item"><div class="legend-dot" style="background:var(--teal)"></div>TE / S</div>
+      <div class="legend-item"><div class="legend-dot" style="background:var(--gold)"></div>OL</div>
+      <div class="legend-item"><div class="legend-dot" style="background:var(--orange)"></div>EDGE</div>
+      <div class="legend-item"><div class="legend-dot" style="background:var(--purple)"></div>DT</div>
+      <div class="legend-item"><div class="legend-dot" style="background:#f5d060"></div>LB</div>
+      <div class="legend-item"><div class="legend-dot" style="background:#f08abd"></div>CB</div>
+    </div>
+  </footer>
+</div>
 
 <script>
+/* ── TAB SWITCHING ── */
+document.querySelectorAll('.tab-btn').forEach(function(btn) {
+  btn.addEventListener('click', function() {
+    document.querySelectorAll('.tab-btn').forEach(function(b) { b.classList.remove('active'); });
+    document.querySelectorAll('.sport-panel').forEach(function(p) { p.classList.remove('visible'); });
+    btn.classList.add('active');
+    document.getElementById('panel-' + btn.dataset.sport).classList.add('visible');
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  });
+});
+
+/* ── SHARED CARD BUILDER ── */
+function buildPickCard(p) {
+  var card = document.createElement('div');
+  var cls = 'pick';
+  if (p.top)             cls += ' top-pick';
+  if (p.round === 'R1')  cls += ' r1-pick';
+  if (p.round === 'PPI') cls += ' ppi-pick';
+  if (p.round === 'CBA') cls += ' cb-pick';
+  card.className = cls;
+  card.style.animationDelay = Math.min((p.pick - 1) * 0.04, 1.2) + 's';
+  card.innerHTML =
+    '<div class="pick-header">' +
+      '<div class="pick-num">' + p.pick + '</div>' +
+      '<div><div class="player-name">' + p.name + '</div>' +
+      '<div class="player-meta">' + p.school + '</div></div>' +
+      '<div class="team-cell">' + p.team + '</div>' +
+      '<div class="position pos-' + p.posClass + '">' + p.pos + '</div>' +
+      '<div class="toggle-arrow">&#9660;</div>' +
+    '</div>' +
+    '<div class="write-up-panel"><div class="write-up-inner">' + p.writeup + '</div></div>';
+
+  var hdr   = card.querySelector('.pick-header');
+  var panel = card.querySelector('.write-up-panel');
+  hdr.addEventListener('click', function() {
+    if (card.classList.contains('open')) {
+      card.classList.remove('open');
+      panel.style.maxHeight = '0';
+    } else {
+      card.classList.add('open');
+      panel.style.maxHeight = panel.scrollHeight + 'px';
+      requestAnimationFrame(function() {
+        requestAnimationFrame(function() { panel.style.maxHeight = 'none'; });
+      });
+    }
+  });
+  return card;
+}
+
+/* ══════════════ MLB DATA ══════════════ */
 const ROUND_META = {
-  R1:  { label:"Round 1",                            cls:"r1",   note:"Picks 1–25 in reverse order of 2025 final standings." },
-  PPI: { label:"Prospect Promotion Incentive Picks", cls:"rppi", note:"Picks 26–28 awarded when pre-arbitration Top-100 prospects earn ROY or a top-3 MVP/Cy Young finish. Pick 26: Atlanta (Drake Baldwin, NL ROY). Pick 27: NY Mets. Pick 28: Houston (Hunter Brown, top-3 AL Cy Young)." },
-  CBA: { label:"Competitive Balance Round A",        cls:"rcba", note:"Lottery-assigned tradeable picks for small-market/small-revenue clubs. Order: CLE · KC · ARI · STL · TB (acquired from BAL via Shane Baz trade) · PIT · NYY · PHI · COL." },
+  R1:  { label:"Round 1",                            cls:"r1",   note:"" },
+  PPI: { label:"Prospect Promotion Incentive Picks", cls:"rppi", note:"" },
+  CBA: { label:"Competitive Balance Round A",        cls:"rcba", note:"" },
 };
 
 const picks = [
@@ -310,52 +413,164 @@ const picks = [
     sources:"MLB Pipeline" },
 ];
 
-// ── RENDER ────────────────────────────────────────────────────────────────────
-const board = document.getElementById('board');
-let currentRound = null;
-
-picks.forEach((p, i) => {
-  if (p.round !== currentRound) {
-    currentRound = p.round;
-    const m = ROUND_META[p.round];
-    const rh = document.createElement('div');
-    rh.className = 'round-header';
-    rh.innerHTML = `<div class="round-label ${m.cls}">${m.label}</div><div class="round-line"></div><div class="round-note">${m.note}</div>`;
-    board.appendChild(rh);
-  }
-
-  const isCB  = p.round === 'CBA';
-  const isPPI = p.round === 'PPI';
-  const isTop = p.top === true;
-
-  const card = document.createElement('div');
-  card.className = ['pick', isTop ? 'top-pick' : '', isPPI ? 'ppi-pick' : '', isCB ? 'cb-pick' : ''].filter(Boolean).join(' ');
-  card.style.animationDelay = (i * 0.025).toFixed(3) + 's';
-
-  card.innerHTML = `
-    <div class="pick-header">
-      <div class="pick-num">${p.pick}</div>
-      <div>
-        <div class="player-name">${p.name}</div>
-        <div class="player-meta">${p.school} &middot; ${p.type}</div>
-      </div>
-      <div class="team-cell">${p.team}</div>
-      <div><span class="position pos-${p.posClass}">${p.pos}</span></div>
-      <div class="toggle-arrow">&#9660;</div>
-    </div>
-    <div class="write-up-panel">
-      <div class="write-up-inner">
-        ${p.writeup}
-        ${p.sources ? `<div class="source-tag">Sources: ${p.sources}</div>` : ''}
-      </div>
-    </div>`;
-
-  card.querySelector('.pick-header').addEventListener('click', () => {
-    card.classList.toggle('open');
+/* ══════════════ MLB BOARD BUILD ══════════════ */
+(function() {
+  var board = document.getElementById('mlb-board');
+  var lastRound = null;
+  picks.forEach(function(p) {
+    if (p.round !== lastRound) {
+      lastRound = p.round;
+      var meta = ROUND_META[p.round];
+      var rh = document.createElement('div');
+      rh.className = 'round-header';
+      rh.innerHTML = '<div class="round-label ' + meta.cls + '">' + meta.label + '</div><div class="round-line"></div>';
+      board.appendChild(rh);
+    }
+    board.appendChild(buildPickCard(p));
   });
+})();
 
-  board.appendChild(card);
-});
+/* ══════════════ NFL DATA ══════════════ */
+const nflPicks = [
+  { pick:1, top:true,
+    name:"Fernando Mendoza", school:"Indiana", pos:"QB", posClass:"QB", team:"Las Vegas Raiders",
+    writeup:`<p>The undisputed No. 1 overall pick and one of the most clarifying top selections in recent memory. Mendoza won the 2025 Heisman Trophy while leading Indiana to a perfect 14-0 record and a national championship — the program's first. In his lone season with the Hoosiers he posted a <em>90.3 QBR</em> (first in the nation), 41 touchdown passes, 6.2% big-time throw rate, and a 2.3% turnover-worthy play rate — numbers that compare favorably to recent No. 1 picks Cam Ward and Caleb Williams. At 6'5", 225 pounds, Mendoza combined elite accuracy to all three levels with composed pocket presence and decisive decision-making in clutch moments.</p><p>The Raiders are overhauling the franchise under new head coach Klint Kubiak, who brought an offensive-minded system to Las Vegas. With Geno Smith throwing a league-high 17 interceptions in 2025 and the Raiders ranking 28th in team passing grade, the need for a franchise quarterback could not be more urgent. Mendoza arrives with legitimate building blocks already in place — Pro Bowl tight end Brock Bowers and Pro Bowl running back Ashton Jeanty give the rookie an enviable supporting cast. ESPN's Field Yates calls Mendoza "the ideal partner" for Kubiak, while Mel Kiper Jr. ranks him the clear-cut top quarterback in the class with "elite accuracy and overall arm talent to throw to all levels of the field."</p>` },
+
+  { pick:2, top:true,
+    name:"Arvell Reese", school:"Ohio State", pos:"LB", posClass:"LB", team:"New York Jets",
+    writeup:`<p>The Jets allowed the second-most points per game in the NFL in 2025 (29.6) and desperately needed a tone-setter on defense coming into the offseason. New head coach Aaron Glenn — the former Detroit defensive coordinator — has made defense his organizational identity and Reese is the perfect first building block. The Ohio State standout is a legitimate two-position player who flashes elite traits whether deployed as an off-ball linebacker or as an edge rusher — he recorded 6.5 sacks in 2025 after posting just 0.5 as primarily a linebacker the year before, showing his full athleticism once given a clearer role as a primary rusher.</p><p>PFF analysts describe Reese as "a dynamic athlete who possesses explosive ability when triggering downhill" with "exceptional burst and power, plus the frame to be a standout NFL edge rusher." At 6'4", 245 pounds, he has the size to hold up against the run while retaining the suddenness to win as a pass rusher. Mel Kiper ranks him No. 1 at his position. Multiple draft analysts have noted that depending on team needs and how the Raiders' pick plays out, Reese could easily be the second player taken. Yates specifically calls him "arguably the best defender available" in a year where the defensive side of the ball is exceptionally deep.</p>` },
+
+  { pick:3, top:true,
+    name:"Francis Mauigoa", school:"Miami (FL)", pos:"OT", posClass:"OL", team:"Arizona Cardinals",
+    writeup:`<p>With no quarterback worthy of replacing Kyler Murray available at pick three, the Cardinals make the prudent move and grab the best offensive lineman in the class. Mauigoa is a physically imposing 6'6", 315-pound tackle from Miami who earned an <em>87.0 PFF pass-blocking grade</em> in 2025 — one of the best marks in college football. Multiple draft analysts project him as an immediate NFL starter, capable of playing right tackle from Day 1 and growing into a franchise left tackle over the first two seasons of his career. His leverage, punch timing, and lateral footwork grade as above-average across the board.</p><p>New head coach Mike LaFleur arrived with an offensive-minded background and will prioritize building from the trenches outward. Mauigoa is the kind of player who anchors a line for a decade. Draft analyst Jordan Reid notes his "87.0 PFF pass-blocking grade in 2025" and calls him an "immediate starter on the right side." Baseball's parallel to a top-of-rotation arm, Mauigoa gives Arizona a controllable, cost-effective building block up front while the franchise figures out the Kyler Murray succession plan at quarterback.</p>` },
+
+  { pick:4,
+    name:"Rueben Bain Jr.", school:"Miami (FL)", pos:"EDGE", posClass:"EDGE", team:"Tennessee Titans",
+    writeup:`<p>One of the most polarizing — and devastating — pass rushers in the draft class. Bain led the FBS in pressures in 2025 with 83, despite significant positional questions about whether he projects as a true edge rusher or a wide-bodied interior defender at the next level. At 6'3", 275 pounds with shorter arms, some evaluators worry about his fit in a traditional 4-3, while others see a swiss-army disruptor who can wreak havoc from multiple alignments. PFF's Trevor Sikkema calls him "a powerful, effective rusher who utilizes strength and physicality" regardless of where he lines up.</p><p>Tennessee is adding a primary edge rusher to play alongside Jeffery Simmons — and Bain provides exactly that kind of foundational pass-rush talent. His 2025 performance for Miami was exceptional: he overwhelms blockers at the point of attack with heavy hands and elite first-step quickness, generating constant pressure even when not finishing to a sack. New Titans defensive coordinator Robert Saleh specifically prioritizes four-man pass rushes, and Bain slots in as an ideal piece. ESPN's Jordan Reid calls this "a near-perfect match" for Tennessee's defensive philosophy.</p>` },
+
+  { pick:5,
+    name:"Caleb Downs", school:"Ohio State", pos:"S", posClass:"S", team:"New York Giants",
+    writeup:`<p>Perhaps the most complete player in the entire draft class despite playing the least-compensated position in football. Downs earned <em>85.0-plus PFF overall grades in each of the last three seasons</em> — a remarkable consistency that spans his time at Alabama (where he was a freshman All-American) and his transfer to Ohio State. In 2025 he posted an 89.3 coverage grade and an 82.5 run-defense grade, allowed only a 27.5 NFL passer rating when targeted, and was the Buckeyes' single most important defensive player. At 6'0", 205 pounds, he is a legitimate every-down weapon who can match up against tight ends, rotate into box linebacker alignments, and patrol centerfield.</p><p>PFF mock draft analysts call him "firmly in the conversation as the best overall player in this draft," and multiple boards have him as a consensus top-five talent regardless of position scarcity concerns. The Giants are in rebuild mode under John Harbaugh and both starting safeties earned sub-60.0 PFF grades in 2025. Downs immediately upgrades the back end and brings the kind of on-field leadership and football IQ that young defenses need. One scouting report called him "All-Pro written all over him as a versatile chess piece on the backend."</p>` },
+
+  { pick:6,
+    name:"Spencer Fano", school:"Utah", pos:"OT", posClass:"OL", team:"Cleveland Browns",
+    writeup:`<p>Cleveland needs offensive talent across the board, and Fano is one of the draft's safest prospects regardless of position. The Utah right tackle started all two of his seasons with the Utes and has been one of the most technically sound blockers in college football since arriving on campus. He brings plus athleticism for his 6'6" frame, advanced hand technique, and the raw physical tools to develop into a multi-year NFL starter. PFF's big board consistently places him among the top six or seven prospects in the class, and multiple analysts describe him as the second-best offensive tackle available.</p><p>The Browns have been in quarterback flux since drafting Deshaun Watson, but the offensive line situation has been equally dire. Whoever ends up under center in Cleveland deserves better protection than the team provided in recent seasons. Fano gives whichever regime runs the franchise a controllable starting tackle. ESPN's Jordan Reid notes that Fano "started the last two seasons at right tackle for the Utes" and praises his consistency as a run blocker and pass protector alike — a rare combination at the top of the draft.</p>` },
+
+  { pick:7,
+    name:"Jermod McCoy", school:"Tennessee", pos:"CB", posClass:"CB", team:"Washington Commanders",
+    writeup:`<p>Washington's defense was one of the worst in the NFL in 2025 despite the offense thriving under Jayden Daniels. New defensive coordinator Daronte Jones is overhauling the scheme, and McCoy is exactly the kind of long, physical corner who fits a press-man system. The Tennessee cornerback has ideal size at 6'1" with 32-inch arms and won with technique as well as athleticism throughout his college career. He showed up on multiple draft boards as a potential top-10 talent depending on medical results, and his 2025 season — in which he allowed a completion rate under 40% when targeted — validated that range.</p><p>Several mock drafts have McCoy going in the 6-10 range. Field Yates pegged him as a fit for Washington given the defensive coordinator's background in defensive backs coaching. Jones ran a similar physical corner archetype in his previous stops and will scheme McCoy into favorable matchups immediately. The Commanders have addressed offensive weapons around Daniels but the defense needs infusions of talent at every level — cornerback being the most glaring need heading into the offseason.</p>` },
+
+  { pick:8,
+    name:"David Bailey", school:"Texas Tech", pos:"EDGE", posClass:"EDGE", team:"New Orleans Saints",
+    writeup:`<p>Bailey led the FBS with <em>15 sacks and a 93.8 PFF pass-rush grade</em> in 2025, making him arguably the most productive pass rusher in college football last season. The 6'4", 255-pound Texas Tech edge defender transferred in from Stanford, where he began building his pass-rush toolkit before fully blossoming at Tech. He combines first-step quickness with a diverse set of counter moves and the natural bend to turn the corner against NFL-caliber blockers. His production wasn't a fluke — he consistently won in 1-on-1 matchups throughout the year and generated pressure on early downs as well as passing situations.</p><p>The Saints have a Cameron Jordan-sized hole at pass rusher with the veteran heading toward the end of his career. PFF's three-round mock draft called this "a near-perfect match" for New Orleans, and head coach Kellen Moore's defense requires a consistent pass-rush presence to take pressure off what should be a Tyler Shough–led offense improving in year two. Bailey gives the Saints a long-term piece at the most valuable non-quarterback position on the field.</p>` },
+
+  { pick:9,
+    name:"Jeremiyah Love", school:"Notre Dame", pos:"RB", posClass:"RB", team:"Kansas City Chiefs",
+    writeup:`<p>The best offensive player in the draft class who isn't a quarterback. Love was college football's most explosive running back in 2025, posting 39 rushes of 10-plus yards (fourth in the FBS) and earning back-to-back PFF overall grades above 91.0 — exceptional marks for any college position player. At 6'0", 206 pounds he offers a rare blend of power and wiggle, ranking among the national leaders in yards after contact while also serving as a legitimate receiving threat out of the backfield. Notre Dame used him in an every-down role in their CFP run and he delivered in every facet.</p><p>The Chiefs had a dismal offensive year in 2025 without Patrick Mahomes at full strength, and the backfield lacked the star-level playmaker Andy Reid has built his best offenses around. Love arriving alongside a healthy Mahomes is a frightening proposition for the rest of the AFC. PFF analysts projected Love would "instantly be the favorite to win Offensive Rookie of the Year" landing in Kansas City. ESPN's Jordan Reid notes the Saints used Love as the target here too, calling him "explosive and capable of being used in the passing game" — but Kansas City's offensive infrastructure makes him a perfect fit.</p>` },
+
+  { pick:10,
+    name:"Keldric Faulk", school:"Auburn", pos:"EDGE", posClass:"EDGE", team:"Cincinnati Bengals",
+    writeup:`<p>Cincinnati's defense collapsed in 2025, surrendering 5.2 yards per rush (second-worst in the NFL) while generating inconsistent pressure off the edge. Faulk is an ideal fit for what the Bengals need to rebuild — a physically imposing, high-motor pass rusher with the versatility to play in multiple fronts. The 6'6", 288-pound Auburn edge defender brings a rare combination of frame and explosiveness, posting 11 tackles for loss and 7 sacks in a 2024 sophomore season before adjusting to increased attention in 2025. His bend-to-frame ratio and ability to deploy multiple pass-rush moves grade as first-round traits across scouting departments.</p><p>Field Yates praised Faulk as "a building block in any scheme" with "the frame and playing style" drawing comparisons to Mykel Williams and Greg Rousseau. The Bengals have Joe Burrow at quarterback with legitimate Super Bowl aspirations but the defense needs a foundational piece on the edge to unlock the roster's full potential. SI's pre-combine mock noted that "strength and physicality are great baseline traits for instant success" — the kind of immediate contributor Cincinnati needs.</p>` },
+
+  { pick:11,
+    name:"Mansoor Delane", school:"LSU", pos:"CB", posClass:"CB", team:"Miami Dolphins",
+    writeup:`<p>Miami brought in a defensive-minded coaching staff under Jeff Hafley and the cornerback position is the immediate priority. Delane was statistically one of the best corners in college football in 2025, earning an <em>89.1 PFF grade in man coverage</em> and allowing a catch on only 37.1% of passes thrown into his coverage. At 6'1", 187 pounds with elite instincts and refined technique, he projects as a true No. 1 corner capable of locking down opposing top receivers from Week 1. Multiple prospect rankings have him as the top cornerback in the class, and his PFF grade in man coverage is among the best posted by any corner in recent draft cycles.</p><p>Miami lost Jaelan Phillips to a mid-season trade and Tua Tagovailoa has been benched, meaning the rebuild starts on both sides of the ball. But a corner of Delane's caliber is both rare and valuable — and Hafley's background as a defensive backs coach at Notre Dame and Ohio State means he will know exactly how to maximize Delane's skill set. One scouting report from Sportsbookreview called him "a technician with top-notch cover instincts" who can be the cornerstone of the Dolphins' defensive rebuild.</p>` },
+
+  { pick:12,
+    name:"Sonny Styles", school:"Ohio State", pos:"LB", posClass:"LB", team:"Dallas Cowboys",
+    writeup:`<p>Dallas allowed 6.1 yards per play in 2025, second-worst in the NFL, and linebacker was among the most glaring deficiencies. Styles is the most complete linebacker in the draft class — a 6'5", 243-pound specimen who earned elite grades in coverage, run defense, and as a blitzer during his time at Ohio State. His grading profile draws direct comparisons to Fred Warner — one of the best linebackers in the NFL — from his BYU days, per PFF lead analyst Trevor Sikkema. He forced 12 incompletions over the past two seasons and posted a pass-coverage grade that routinely places him atop linebacker rankings nationally.</p><p>New Cowboys defensive coordinator Christian Parker will love having Styles as the centerpiece of a rebuilt linebacker corps. Multiple draft analysts noted that "if Sonny Styles falls to [Dallas] at No. 12, Jerry Jones should throw a party" — and in most consensus mocks, that's approximately where he lands. ESPN's Field Yates called Styles "a building block" with "rare size and athleticism for the position" and "true three-down potential with elite athleticism and range." He's the kind of generational linebacker talent that changes a franchise's defensive identity.</p>` },
+
+  { pick:13,
+    name:"Makai Lemon", school:"USC", pos:"WR", posClass:"WR", team:"Los Angeles Rams (via ATL)",
+    writeup:`<p>The Rams hold the Falcons' first-round pick as a result of the James Pearce Jr. trade and are using it to add to a roster that still has Matthew Stafford (who announced his return in 2026 after winning MVP) at quarterback. With the team's cornerback situation as the primary concern, some analysts have the Rams using both first-rounders on CBs. Others project a wide receiver here, and Lemon is the most dynamic wideout available at this range. The 6'0" USC receiver was one of college football's most electric playmakers in 2025, combining contested-catch ability with explosive yards-after-catch in Lincoln Riley's vertical passing game.</p><p>Lemon's size-speed combination and natural hands project as a genuine No. 2 receiver from Day 1. With Puka Nacua and Cooper Kupp commanding coverage attention, Lemon would have the opportunity to develop in favorable positions. ESPN's Field Yates specifically projects him to the Rams at this range, calling him a "dynamic playmaker" who gives Stafford another weapon to stretch defenses vertically during what figures to be a championship-window season for Los Angeles.</p>` },
+
+  { pick:14,
+    name:"Garrett Nussmeier", school:"LSU", pos:"QB", posClass:"QB", team:"Baltimore Ravens",
+    writeup:`<p>Baltimore has Lamar Jackson locked up long-term, but GM Eric DeCosta is always thinking three moves ahead — and Lamar turns 29 in January. Adding a first-round developmental quarterback is a legitimate organizational priority, and Nussmeier is the ideal "sit and learn" prospect. The son of Saints offensive coordinator Doug Nussmeier, Garrett is a football-first processor who plays with elite pre-snap acumen and well above-average accuracy. In 2025 he threw for 4,052 yards and 29 touchdowns at LSU while completing passes at a high rate — numbers that reflect a quarterback who distributes the ball quickly, on time, and to spots where receivers can create after the catch.</p><p>Mel Kiper ranks Nussmeier among his top quarterbacks in the class, praising his "elite processing skills and very good accuracy" while acknowledging he "lacks dynamic athleticism and has just solid arm strength." That profile — a smart, accurate field general without elite physical tools — makes him a perfect complementary investment behind one of the most physically gifted quarterbacks in NFL history. Baltimore has a history of developing quarterbacks within their system, and Nussmeier's football IQ gives him a legitimate path to a starting role when Lamar eventually moves on.</p>` },
+
+  { pick:15,
+    name:"Cashius Howell", school:"Texas A&M", pos:"EDGE", posClass:"EDGE", team:"Tampa Bay Buccaneers",
+    writeup:`<p>The Buccaneers' front seven needs reinforcements beyond Vita Vea, and Howell is an intriguing developmental prospect with first-round physical tools. At 6'5", 255 pounds, the Texas A&M edge defender combines a massive frame with enough first-step quickness to win against NFL tackles. His production in 2025 built steadily across the season and his best football is clearly ahead of him — an important factor for a Bucs team operating with a longer-term developmental mindset under general manager Jason Licht. Multiple mock drafts in the 14-17 range project him as the type of high-ceiling edge rusher who could become a double-digit sack producer by years two or three.</p><p>Field Yates slots Howell at 15 in his post-Super Bowl mock draft, calling him a player who "fits the Bucs' need for reinforcements in their front seven." His frame and playing style compare favorably to several successful late-first-round edge defenders from recent drafts who developed into star players. Tampa Bay has the quarterback stability with Baker Mayfield to allow the roster to be built defensively in the draft.</p>` },
+
+  { pick:16,
+    name:"Carnell Tate", school:"Ohio State", pos:"WR", posClass:"WR", team:"New York Jets (via IND)",
+    writeup:`<p>The Jets own the Colts' first-round pick after trading Sauce Gardner to Indianapolis for two first-rounders in 2025, and they're using it to add offensive weaponry after a disastrous 2025 season that saw three quarterbacks start. Tate is the most technically refined receiver in the class — a 6'3", 191-pound Ohio State wideout who earned an <em>89.0 PFF receiving grade</em> in 2025, averaging 3.02 yards per route run while catching 85.7% of contested targets with a 0.0% drop rate. He is an X receiver who wins with elite route running and reliable hands rather than speed alone, making him a legitimate No. 1 receiver at the next level.</p><p>PFF's three-round mock specifically called Tate "the type of elite X receiver" who "immediately becomes Cleveland's [or the Jets'] top deep threat." For new Jets quarterback Arvell Reese (or a veteran brought in to bridge), having a polished receiver who wins cleanly at all three levels of the route tree is invaluable. ESPN analysts noted his "dependable big-slot role" and praised the combination of size, route running, and contested-catch ability that makes him a reliable target.</p>` },
+
+  { pick:17,
+    name:"Monroe Freeling", school:"Georgia", pos:"OT", posClass:"OL", team:"Detroit Lions",
+    writeup:`<p>Detroit's offensive line depth has thinned and the Lions need to add young tackle talent on a controllable contract. Freeling is a technically advanced Georgia tackle who improved in every measurable category across his college career and finished 2025 as one of the highest-graded tackles in the SEC. At 6'5" with quality athleticism and legitimate upside as a run blocker, he profiles as a developmental option who could grow into a quality starter by his second or third season. Detroit has the offensive infrastructure already in place to allow Freeling to develop without being thrown into an impossible situation as a rookie.</p><p>Field Yates projects Freeling to the Lions at 17 in his mock. Multiple analysts noted that Freeling "improved with each game this season" and carries "the right traits to develop into a quality NFL starter." His best football is ahead of him, which is exactly the kind of high-ceiling building block that general manager Brad Holmes has favored in the draft. Kadyn Proctor of Alabama is the comparable name at this range.</p>` },
+
+  { pick:18,
+    name:"Brandon Cisse", school:"South Carolina", pos:"CB", posClass:"CB", team:"Minnesota Vikings",
+    writeup:`<p>Minnesota's cornerback depth has been a concern entering the offseason, and Cisse is a tough, physical corner who filled a critical role for South Carolina in 2025. The 6'0" corner posted 10 passes defended over the past two seasons, allowing just 18 receptions and one touchdown in 2025. He is a willing run defender who earns praise for his physical style of play — willing to fill alleys and support against the run in a way that many cover corners avoid. His PFF run-defense grade is significantly above average for the position and that two-way impact gives him every-down value immediately.</p><p>Field Yates projects Cisse to Minnesota at 18 in his post-Super Bowl mock draft. The Vikings run a physical, zone-heavy scheme that benefits from cornerbacks who can tackle and play the ball in zone windows rather than simply covering man-to-man. Cisse fits that profile and gives Minnesota a long-term answer opposite of their top corner. His 10 passes defended over two seasons underscore the ball-production ability that good corners need at the next level.</p>` },
+
+  { pick:19,
+    name:"Akheem Mesidor", school:"Miami (FL)", pos:"EDGE", posClass:"EDGE", team:"Carolina Panthers",
+    writeup:`<p>Mesidor is one of the more experienced pass rushers in the class — an older prospect (25 on draft day) who has traveled a winding path from West Virginia to Miami to becoming one of the ACC's most dangerous edge defenders. In 2025 he posted 74 tackles, 17.5 tackles for loss, 12.5 sacks, 58 pressures, and 4 forced fumbles — statistics that rank among the best single-season outputs by any edge rusher in recent draft history. Mel Kiper ranks him among the top edge rushers in the class and calls his pass-rush repertoire "one of the best in the class." His Canadian background and perseverance through injury (he missed most of 2023) only adds to the intrigue.</p><p>Carolina's defensive coordinator Ejiro Evero built his reputation around generating pass rush, and the Panthers ranked near the bottom of the league in sacks in 2025. Mesidor immediately addresses that need with proven production and the kind of disruptive capability Evero covets. Mel Kiper's Big Board gives Mesidor a strong individual scouting report: "He has one of the best pass-rush repertoires in the class" and "started at West Virginia in 2020 and 2021, racking up 9.5 sacks" before transferring and continuing to produce.</p>` },
+
+  { pick:20,
+    name:"CJ Allen", school:"Georgia", pos:"LB", posClass:"LB", team:"Dallas Cowboys (via GB)",
+    writeup:`<p>Dallas owns the Packers' first-round pick via the Micah Parsons trade — and with two selections in Round 1, the Cowboys are expected to aggressively address their defensive collapse. After taking Sonny Styles at 12, they add Allen at 20 to give new coordinator Christian Parker a pair of foundational linebackers. Allen is a three-down linebacker at the highest level — "his read-and-react skills are excellent and he can make plays in all three aspects of the defense," per Mel Kiper, who credits him with "the physicality to take on blocks in the run game and the speed to chase down ball carriers."</p><p>In 2025, Allen posted 74 tackles, 17.5 tackles for loss, 12.5 sacks, and 9 pass breakups — elite production for a linebacker. He plays with a pass-rusher's first step and a coverage linebacker's fluidity, making him a legitimate every-down contributor from the moment he arrives. Kiper ranks him third among all linebackers in the class. The Cowboys allowed 6.1 yards per play in 2025 — with Styles and Allen anchoring the middle, that unit has the potential to completely transform by year two.</p>` },
+
+  { pick:21,
+    name:"Ty Simpson", school:"Alabama", pos:"QB", posClass:"QB", team:"Pittsburgh Steelers",
+    writeup:`<p>Pittsburgh has been searching for a franchise quarterback since Ben Roethlisberger retired after the 2021 season. Aaron Rodgers signed for one year in 2025, and with his future uncertain, the Steelers face yet another offseason of uncertainty at the position. Simpson is not a top-five talent but represents outstanding value at 21 for a team that needs a long-term answer. The Alabama quarterback didn't start until 2025, but when given the opportunity he posted a 64.5% completion rate, 3,567 yards, 28 touchdown passes, and 5 interceptions — legitimate production in the SEC.</p><p>Mel Kiper's scouting report on Simpson: "He knows the game and competes on every down. He's a battler who is always trying to make a play... Simpson maneuvers well in the pocket and can beat defenses with his legs when the passing play isn't there." The concern is limited experience — he didn't start a game until last season — but Pittsburgh has an established offensive infrastructure and a coaching staff capable of developing a talented but inexperienced quarterback. ESPN's Field Yates specifically projects Simpson to Pittsburgh in his post-Super Bowl mock draft.</p>` },
+
+  { pick:22,
+    name:"Vega Ioane", school:"Penn State", pos:"OL", posClass:"OL", team:"Los Angeles Chargers",
+    writeup:`<p>Los Angeles has invested heavily at skill positions around Justin Herbert but the interior offensive line remains a persistent concern. Ioane is an interior lineman from Penn State who projects as a starting guard from Day 1, providing the Chargers with a reliable piece at a position of need on a cost-controlled rookie contract. His 2025 PFF grade ranked among the best for interior offensive linemen in the Big Ten, and his combination of anchor strength and quick feet in zone-blocking schemes makes him a versatile fit for multiple offensive philosophies.</p><p>Field Yates projects Ioane to the Chargers at 22 in his post-Super Bowl mock. Interior guard is rarely a glamorous position, but adding a legitimate starter at a position of need on a four-year rookie deal gives LA the kind of quiet roster depth that separates good teams from great ones. Herbert has the receiving weapons to compete deep into the playoffs — the offensive line needs to catch up.</p>` },
+
+  { pick:23,
+    name:"Drew Allar", school:"Penn State", pos:"QB", posClass:"QB", team:"Philadelphia Eagles",
+    writeup:`<p>Jalen Hurts has been the Eagles' franchise quarterback but carries injury concerns entering 2026, and GM Howie Roseman has never been shy about drafting premium talent even when the position appears filled. Allar is the most NFL-ready pocket passer in the class outside of Fernando Mendoza — a 6'5", 225-pound Penn State signal-caller with elite arm talent, advanced pocket footwork, and the ability to drive the ball into tight windows with zip and accuracy. He started for two full seasons at Penn State and finished his college career as one of the most efficient quarterbacks in the Big Ten.</p><p>Mel Kiper ranks Allar third among all quarterbacks in the class, behind only Mendoza and Ty Simpson. Multiple analyst boards note his "ability to drive the ball into tight windows" and strong performance in big-game situations for Penn State. For Philadelphia, this is the Roseman move that defines his legacy — taking a potential franchise cornerstone when he's available rather than waiting. If Hurts stays healthy, Allar develops behind him. If Hurts can't stay on the field, Philadelphia has their answer ready. It's exactly the kind of forward-thinking roster construction that has kept the Eagles in contention for years.</p>` },
+
+  { pick:24,
+    name:"Denzel Boston", school:"Washington", pos:"WR", posClass:"WR", team:"Cleveland Browns (via JAX)",
+    writeup:`<p>Cleveland holds the Jaguars' first-round pick from a prior trade and uses it to give whoever lines up at quarterback a legitimate receiving weapon. Boston is a 6'4" wide receiver from Washington who emerged as one of the draft's more intriguing wideouts — a tall, fluid mover with surprising contested-catch ability and the kind of ball skills that project across levels. One scouting report called him "a ball-winning X-receiver that has surprising fluidity at 6-foot-4" — an ideal deep-threat complement to a developing quarterback looking for a big, reliable target.</p><p>Multiple mock drafts have Boston going to Cleveland in the 21-26 range. PFF specifically highlighted him as a quality value here after his development trajectory at Washington continued upward through his final college season. ESPN's Field Yates projects Boston to the Browns at 24, calling him a "fun fit" who "would immediately become Cleveland's top deep threat." The Browns need multiple offensive pieces; a tall, physical wideout who can create separation vertically is a legitimate Day 1 starter at a position of clear need.</p>` },
+
+  { pick:25,
+    name:"Caleb Banks", school:"Florida", pos:"DT", posClass:"DT", team:"Chicago Bears",
+    writeup:`<p>Chicago shocked the football world in 2025 under first-year head coach Ben Johnson, but three glaring needs entering 2026 are left tackle, edge rusher, and defensive tackle. Banks addressed himself as a first-round prospect at the Senior Bowl, earning strong reviews in individual drills and one-on-one matchups that gave evaluators a clearer look at his pass-rush potential. At 6'6", 330 pounds, Banks is a massive interior presence whose combination of size and athleticism is rare at the position. His pass-rush production at Florida (two sacks as a sophomore in 2024 before adjusting to increased double-teams) reflects the challenge of playing interior DT in the SEC rather than a talent limitation.</p><p>No Bears defensive tackle earned a 55.0-plus PFF run-defense grade in 2025 — a gaping hole that Banks immediately fills. He won't offer prolific pass-rush numbers right away, but his ability to occupy multiple blockers and create space for edge rushers on the perimeter gives Chicago a foundational piece to build around. PFF's mock draft specifically highlights this pick, noting that Banks "established himself as a first-round prospect at this year's Senior Bowl."</p>` },
+
+  { pick:26,
+    name:"Anthony Hill Jr.", school:"Texas", pos:"LB", posClass:"LB", team:"Buffalo Bills",
+    writeup:`<p>Buffalo has built one of the most complete rosters in the AFC around Josh Allen, but the linebacker position has been a persistent question mark entering 2026. Hill is a physical, instinctive linebacker from Texas who plays with a pass-rusher's motor and a coverage linebacker's range. At 6'3", 245 pounds, he brings the ideal combination of size and athleticism for a modern three-down linebacker role — capable of blitzing, matching up in coverage, and filling rushing lanes against the run with equal effectiveness. Mel Kiper ranks him fourth among all linebackers in the class.</p><p>New Bills head coach Joe Brady has the offensive side of the ball fully figured out with Allen. The priority in the draft is defensive improvement, and Hill's combination of versatility and immediate impact potential makes him a natural fit at this range. Multiple mock drafts project Hill to either Buffalo or San Francisco in the mid-20s. His Texas production — including consistent performances in big games — suggests a player ready to contribute immediately in a team fighting for a Super Bowl title.</p>` },
+
+  { pick:27,
+    name:"KC Concepcion", school:"Texas A&M", pos:"WR", posClass:"WR", team:"San Francisco 49ers",
+    writeup:`<p>San Francisco was last in the NFL in sacks and pressure rate, but the passing game also needs an infusion of talent. Concepcion is a dynamic Texas A&M receiver who emerged as one of the more productive wideouts in the SEC in 2025, combining strong route-running technique with the kind of release package and body control that projects favorably to the next level. He gives Brock Purdy — who thrives with playmakers in tight spaces — a legitimate weapon to pair with the existing core. Multiple mock drafts project Concepcion to the 49ers in the mid-to-late first round as San Francisco addresses multiple needs.</p><p>Field Yates projects Concepcion to San Francisco at 27 in his post-Super Bowl mock draft. The 49ers have built their offensive identity around precise route runners who can exploit zone coverage, and Concepcion fits that profile. He is the kind of polished receiver who can contribute meaningfully in Kyle Shanahan's system from the moment of installation — a critical factor given the 49ers' championship-window timeline with Purdy on a new contract.</p>` },
+
+  { pick:28,
+    name:"Kadyn Proctor", school:"Alabama", pos:"OT", posClass:"OL", team:"Houston Texans",
+    writeup:`<p>Houston needs to protect CJ Stroud better, and Proctor is one of the more physically imposing tackle prospects in the class. At 6'7", 360-plus pounds, he is a specimen who allowed just two sacks in 15 games in 2025 while earning an <em>86.1 PFF overall grade</em> — one of the best marks among qualified FBS tackles all season. His massive frame and ability to anchor against powerful bull rushers make him a natural fit on the right side of the offensive line, where Houston has had inconsistency in recent years. Despite some evaluators characterizing him as a "polarizing" prospect due to questions about his overall athleticism, his performance-based metrics are among the best in the class.</p><p>Field Yates projects Proctor to Houston at 28 in his post-Super Bowl mock. With Aireontae Ersery developing on the left side, adding Proctor on the right creates a promising young tackle duo for the Texans' offensive line. Multiple other mocks also project him to a team that can develop an athletic-but-raw tackle prospect, and Houston's established offensive infrastructure under CJ Stroud makes this an ideal landing spot.</p>` },
+
+  { pick:29,
+    name:"Colton Hood", school:"Tennessee", pos:"CB", posClass:"CB", team:"Los Angeles Rams (pick 2)",
+    writeup:`<p>The Rams' second first-round pick (their own selection, after using the Falcons' pick at 13) goes to cornerback — the team's most significant positional need heading into 2026. Jaxon Smith-Njigba burned the Rams in three matchups during the regular season for 354 receiving yards, exposing a secondary that needs immediate investment. Hood transferred to Tennessee prior to 2025 after time at Georgia, and blossomed as one of the SEC's best corners — posting 10 pass breakups while earning PFF coverage grades above 70.0 in both man and zone, a versatility that few corners his age demonstrate.</p><p>Field Yates specifically projects Hood to the Rams here in his post-Super Bowl mock draft, calling this "a double-dip at cornerback" from the same general area (with McCoy also projected as a Rams consideration in some mocks). Hood "more than made up for McCoy's void" in Tennessee's secondary after the transfer, per Yates, and his versatility to play both man and zone makes him an ideal fit in Sean McVay's defense. Matthew Stafford's confirmation that he will return for 2026 makes cornerback the clear priority for what remains a championship-caliber roster.</p>` },
+
+  { pick:30,
+    name:"Kenyon Sadiq", school:"Oregon", pos:"TE", posClass:"TE", team:"Denver Broncos",
+    writeup:`<p>Denver had a heartbreaking end to the 2025 season when Bo Nix was injured on the final play of a divisional playoff victory, ending a promising championship run. The Broncos enter 2026 committed to maximizing Nix's development and adding playmakers around him. Sadiq is described as "a freak of an athlete" by multiple analysts — a physically imposing tight end who is "as physical a blocker as he is explosive a pass catcher." He led the FBS in first-down receptions among tight ends (30) in 2025 and brings the kind of dual-threat capability that modern offenses demand from the position.</p><p>Field Yates projects Sadiq to Denver at 30 in his mock. Sadiq's range starts earlier than this on many boards — PFF and other analysts note he could be a first-round pick "sooner than here" if teams prioritize tight end. Denver gets excellent value if Sadiq falls this far. The Broncos' offense with Nix at quarterback and Sadiq as the featured tight end gives the young signal-caller a reliable check-down option who can also take the top off defenses down the seam.</p>` },
+
+  { pick:31,
+    name:"Caleb Lomu", school:"Utah", pos:"OT", posClass:"OL", team:"New England Patriots",
+    writeup:`<p>New England fell to the Seahawks in Super Bowl LX and picks 31st — a bittersweet reward for a deep playoff run. The Patriots have significant offensive line needs entering the offseason and Lomu is a massive, high-ceiling tackle prospect who gave up just two sacks across 807 pass-blocking snaps over the past two college seasons. At 6'5", 295 pounds with limited collegiate experience (just 28 games entering his draft declaration), Lomu is a raw but physically gifted lineman who projects as a multi-year developmental piece.</p><p>Field Yates projects Lomu to New England at 31 in his post-Super Bowl mock. PFF noted that Lomu "gave up just two sacks in 807 pass-blocking snaps over the past two seasons and is a high-ceiling prospect, having just 28 collegiate games under his belt." New England's offensive line rebuild needs exactly this kind of multi-year investment — a developmental tackle on a cost-controlled rookie contract who can grow into a starting role over two to three seasons. The Patriots' coaching staff has historically shown an ability to develop offensive linemen from raw starting points.</p>` },
+
+  { pick:32,
+    name:"Avieon Terrell", school:"Clemson", pos:"CB", posClass:"CB", team:"Seattle Seahawks",
+    writeup:`<p>Super Bowl champion Seattle picks last and uses the selection to shore up a secondary that will lose cornerback depth in free agency entering 2026 — Coby Bryant, Tariq Woolen, and Joshua Jobe are all playing on expiring deals. Terrell is a 6'0" Clemson corner who improved his PFF overall grade in each of the past two seasons and has proven to be a willing run defender, earning an <em>86.4 PFF run-defense grade</em> in 2025 — outstanding for a corner and a trait new Seahawks general manager John Schneider has specifically prioritized in his defensive backs. Terrell's technical improvement across his college career suggests further development at the next level.</p><p>PFF's mock draft specifically projects Terrell to Seattle in the late first round, noting his trajectory and willingness as a run defender make him an ideal fit for a Seahawks secondary that lost top depth. Winning the Super Bowl gives Seattle a stable foundation but the roster needs to be maintained — and adding a quality cornerback on a four-year rookie deal secures that depth for a championship window that is very much open.</p>` },
+];
+
+/* ══════════════ NFL BOARD BUILD ══════════════ */
+(function() {
+  var board = document.getElementById('nfl-board');
+  var rh = document.createElement('div');
+  rh.className = 'round-header';
+  rh.innerHTML = '<div class="round-label nfl-r1">Round 1</div><div class="round-line"></div>';
+  board.appendChild(rh);
+  nflPicks.forEach(function(p) { board.appendChild(buildPickCard(p)); });
+})();
+
 </script>
 </body>
 </html>
