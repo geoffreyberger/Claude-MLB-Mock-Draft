@@ -7,17 +7,10 @@
 <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Serif+Display:ital@0;1&family=JetBrains+Mono:wght@400;600;700&family=Instrument+Sans:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
 <style>
   :root {
-    --midnight: #06101e;
-    --red:   #c8102e;
-    --gold:  #d4a847;
-    --cream: #f0ebe1;
-    --muted: #7a8fa8;
-    --card:  #0f1e32;
-    --border:#1a2e48;
-    --teal:  #3ecfc6;
-    --green: #2db34f;
-    --orange:#e07b30;
-    --purple:#9b72cf;
+    --midnight:#06101e; --red:#c8102e; --gold:#d4a847; --cream:#f0ebe1; --muted:#7a8fa8;
+    --card:#0f1e32; --border:#1a2e48; --teal:#3ecfc6; --green:#2db34f;
+    --orange:#e07b30; --purple:#9b72cf;
+    --nhl-blue:#1e90ff; --nba-orange:#f07d22;
   }
   *, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
   body { background:var(--midnight); color:var(--cream); font-family:'Instrument Sans',sans-serif; min-height:100vh; overflow-x:hidden; }
@@ -26,21 +19,27 @@
     background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E"); opacity:.45;
   }
   /* ── TAB NAV ── */
-  .tab-nav { position:sticky; top:0; z-index:300; display:flex; border-bottom:1px solid var(--border); background:rgba(6,16,30,0.97); backdrop-filter:blur(12px); }
-  .tab-btn { flex:1; max-width:280px; display:flex; align-items:center; justify-content:center; gap:10px; padding:16px 24px; font-family:'JetBrains Mono',monospace; font-size:11px; letter-spacing:2.5px; text-transform:uppercase; color:var(--muted); border:none; background:none; cursor:pointer; border-bottom:2px solid transparent; transition:color .2s, border-color .2s; }
+  .tab-nav { position:sticky; top:0; z-index:300; display:flex; justify-content:center; border-bottom:1px solid var(--border); background:rgba(6,16,30,0.97); backdrop-filter:blur(12px); overflow-x:auto; }
+  .tab-btn { flex:0 0 auto; min-width:120px; max-width:220px; display:flex; align-items:center; justify-content:center; gap:8px; padding:14px 20px; font-family:'JetBrains Mono',monospace; font-size:10px; letter-spacing:2px; text-transform:uppercase; color:var(--muted); border:none; background:none; cursor:pointer; border-bottom:2px solid transparent; transition:color .2s, border-color .2s; white-space:nowrap; }
   .tab-btn:hover { color:var(--cream); }
   .tab-btn.active[data-sport="mlb"] { color:var(--red); border-bottom-color:var(--red); }
   .tab-btn.active[data-sport="nfl"] { color:var(--green); border-bottom-color:var(--green); }
-  .tab-sport { font-family:'Bebas Neue',sans-serif; font-size:22px; letter-spacing:1px; line-height:1; }
+  .tab-btn.active[data-sport="nhl"] { color:var(--nhl-blue); border-bottom-color:var(--nhl-blue); }
+  .tab-btn.active[data-sport="nba"] { color:var(--nba-orange); border-bottom-color:var(--nba-orange); }
+  .tab-sport { font-family:'Bebas Neue',sans-serif; font-size:20px; letter-spacing:1px; line-height:1; }
   /* ── PANELS ── */
   .sport-panel { display:none; }
   .sport-panel.visible { display:block; }
   /* ── HEADERS ── */
   header { position:relative; padding:52px 48px 44px; border-bottom:1px solid var(--border); overflow:hidden; }
-  .mlb-header::after { content:'2026'; position:absolute; right:-10px; top:-24px; font-family:'Bebas Neue',sans-serif; font-size:clamp(150px,22vw,300px); color:rgba(200,16,46,0.055); line-height:1; pointer-events:none; letter-spacing:-4px; }
-  .nfl-header::after { content:'2026'; position:absolute; right:-10px; top:-24px; font-family:'Bebas Neue',sans-serif; font-size:clamp(150px,22vw,300px); color:rgba(45,179,79,0.05); line-height:1; pointer-events:none; letter-spacing:-4px; }
+  .mlb-header::after  { content:'2026'; position:absolute; right:-10px; top:-24px; font-family:'Bebas Neue',sans-serif; font-size:clamp(150px,22vw,300px); color:rgba(200,16,46,0.055); line-height:1; pointer-events:none; letter-spacing:-4px; }
+  .nfl-header::after  { content:'2026'; position:absolute; right:-10px; top:-24px; font-family:'Bebas Neue',sans-serif; font-size:clamp(150px,22vw,300px); color:rgba(45,179,79,0.05);   line-height:1; pointer-events:none; letter-spacing:-4px; }
+  .nhl-header::after  { content:'2026'; position:absolute; right:-10px; top:-24px; font-family:'Bebas Neue',sans-serif; font-size:clamp(150px,22vw,300px); color:rgba(30,144,255,0.05); line-height:1; pointer-events:none; letter-spacing:-4px; }
+  .nba-header::after  { content:'2026'; position:absolute; right:-10px; top:-24px; font-family:'Bebas Neue',sans-serif; font-size:clamp(150px,22vw,300px); color:rgba(240,125,34,0.05); line-height:1; pointer-events:none; letter-spacing:-4px; }
   .mlb-title { font-family:'Bebas Neue',sans-serif; font-size:clamp(60px,9vw,110px); line-height:.88; letter-spacing:2px; background:linear-gradient(130deg,var(--cream) 55%,var(--gold) 100%); -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text; text-align:center; }
   .nfl-title { font-family:'Bebas Neue',sans-serif; font-size:clamp(60px,9vw,110px); line-height:.88; letter-spacing:2px; background:linear-gradient(130deg,var(--cream) 55%,var(--green) 100%); -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text; text-align:center; }
+  .nhl-title { font-family:'Bebas Neue',sans-serif; font-size:clamp(60px,9vw,110px); line-height:.88; letter-spacing:2px; background:linear-gradient(130deg,var(--cream) 55%,var(--nhl-blue) 100%); -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text; text-align:center; }
+  .nba-title { font-family:'Bebas Neue',sans-serif; font-size:clamp(60px,9vw,110px); line-height:.88; letter-spacing:2px; background:linear-gradient(130deg,var(--cream) 55%,var(--nba-orange) 100%); -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text; text-align:center; }
   /* ── DRAFT BOARD ── */
   .draft-board { padding:24px 48px 60px; max-width:1360px; margin:0 auto; }
   .round-header { display:flex; align-items:flex-start; gap:16px; padding:36px 0 14px; margin-top:8px; }
@@ -49,26 +48,47 @@
   .round-label.rppi { color:var(--teal); }
   .round-label.rcba { color:var(--gold); }
   .round-label.nfl-r1 { color:var(--green); }
+  .round-label.nhl-r1 { color:var(--nhl-blue); }
+  .round-label.nba-r1 { color:var(--nba-orange); }
   .round-line { width:1px; background:var(--border); align-self:stretch; flex-shrink:0; margin:4px 0; }
   /* ── PICK CARDS ── */
   .pick { position:relative; overflow:hidden; background:var(--card); border:1px solid transparent; border-radius:4px; margin-bottom:6px; animation:fadeSlide .4s both; transition:border-color .2s, background .2s, transform .18s; }
   .pick::before { content:''; position:absolute; left:0; top:0; bottom:0; width:3px; background:var(--border); transition:background .2s; }
   .pick:hover { border-color:var(--border); background:#132038; transform:translateX(3px); }
+  /* MLB */
   .mlb-panel .pick:hover::before { background:var(--red); }
-  .mlb-panel .pick.top-pick  { background:linear-gradient(100deg,#142440,var(--card) 60%); }
-  .mlb-panel .pick.r1-pick   { background:linear-gradient(100deg,#1a0a0e,var(--card) 70%); }
+  .mlb-panel .pick.top-pick { background:linear-gradient(100deg,#142440,var(--card) 60%); }
+  .mlb-panel .pick.r1-pick  { background:linear-gradient(100deg,#1a0a0e,var(--card) 70%); }
   .mlb-panel .pick.r1-pick::before  { background:rgba(200,16,46,.4) !important; }
   .mlb-panel .pick.r1-pick:hover::before { background:var(--red) !important; }
-  .mlb-panel .pick.ppi-pick  { background:linear-gradient(100deg,#071a1a,var(--card) 70%); }
+  .mlb-panel .pick.ppi-pick { background:linear-gradient(100deg,#071a1a,var(--card) 70%); }
   .mlb-panel .pick.ppi-pick::before { background:rgba(62,207,198,.4) !important; }
   .mlb-panel .pick.ppi-pick:hover::before { background:var(--teal) !important; }
-  .mlb-panel .pick.cb-pick   { background:linear-gradient(100deg,#1b1508,var(--card) 70%); }
+  .mlb-panel .pick.cb-pick  { background:linear-gradient(100deg,#1b1508,var(--card) 70%); }
   .mlb-panel .pick.cb-pick::before  { background:rgba(212,168,71,.4) !important; }
   .mlb-panel .pick.cb-pick:hover::before  { background:var(--gold) !important; }
-  .nfl-panel .pick:hover::before { background:var(--green); }
-  .nfl-panel .pick.top-pick  { background:linear-gradient(100deg,#0d2018,var(--card) 60%); }
-  .nfl-panel .pick.top-pick::before { background:rgba(45,179,79,.5) !important; }
+  /* NFL */
+  .nfl-panel .pick { background:linear-gradient(100deg,#091a0f,var(--card) 70%); }
+  .nfl-panel .pick::before { background:rgba(45,179,79,.35) !important; }
+  .nfl-panel .pick:hover::before { background:var(--green) !important; }
+  .nfl-panel .pick.top-pick { background:linear-gradient(100deg,#0d2018,var(--card) 55%); }
+  .nfl-panel .pick.top-pick::before { background:rgba(45,179,79,.6) !important; }
   .nfl-panel .pick.top-pick:hover::before { background:var(--green) !important; }
+  /* NHL */
+  .nhl-panel .pick:hover::before { background:var(--nhl-blue); }
+  .nhl-panel .pick.top-pick { background:linear-gradient(100deg,#061830,var(--card) 60%); }
+  .nhl-panel .pick.top-pick::before { background:rgba(30,144,255,.5) !important; }
+  .nhl-panel .pick.top-pick:hover::before { background:var(--nhl-blue) !important; }
+  .nhl-panel .pick.forfeited-pick { opacity:.45; pointer-events:none; }
+  .nhl-panel .pick.forfeited-pick::before { background:var(--border) !important; }
+  /* NBA */
+  .nba-panel .pick { background:linear-gradient(100deg,#1a0d05,var(--card) 70%); }
+  .nba-panel .pick::before { background:rgba(240,125,34,.35) !important; }
+  .nba-panel .pick:hover::before { background:var(--nba-orange) !important; }
+  .nba-panel .pick.top-pick { background:linear-gradient(100deg,#1e0e03,var(--card) 55%); }
+  .nba-panel .pick.top-pick::before { background:rgba(240,125,34,.6) !important; }
+  .nba-panel .pick.top-pick:hover::before { background:var(--nba-orange) !important; }
+  /* Card layout */
   .pick-header { display:grid; grid-template-columns:64px 1fr 200px 80px 56px; gap:14px; align-items:center; padding:16px 20px 14px; cursor:pointer; user-select:none; }
   .pick-num { font-family:'Bebas Neue',sans-serif; font-size:30px; line-height:1; }
   .mlb-panel .pick-num  { color:var(--red); }
@@ -77,14 +97,21 @@
   .mlb-panel .top-pick .pick-num { font-size:38px; }
   .nfl-panel  .pick-num  { color:var(--green); }
   .nfl-panel  .top-pick .pick-num { font-size:38px; }
+  .nhl-panel  .pick-num  { color:var(--nhl-blue); }
+  .nhl-panel  .top-pick .pick-num { font-size:38px; }
+  .nba-panel  .pick-num  { color:var(--nba-orange); }
+  .nba-panel  .top-pick .pick-num { font-size:38px; }
   .player-name { font-family:'DM Serif Display',serif; font-size:18px; color:var(--cream); line-height:1.15; }
   .player-meta { font-family:'JetBrains Mono',monospace; font-size:10px; color:var(--muted); letter-spacing:1px; text-transform:uppercase; margin-top:3px; }
   .team-cell { font-family:'Instrument Sans',sans-serif; font-size:13px; font-weight:600; color:var(--cream); line-height:1.3; text-align:right; }
-  .position { display:inline-flex; align-items:center; justify-content:center; width:42px; height:42px; border-radius:50%; font-family:'Bebas Neue',sans-serif; font-size:13px; letter-spacing:1px; }
+  /* Position badges */
+  .position { display:inline-flex; align-items:center; justify-content:center; width:42px; height:42px; border-radius:50%; font-family:'Bebas Neue',sans-serif; font-size:12px; letter-spacing:1px; }
+  /* MLB */
   .pos-P  { background:rgba(200,16,46,.14);  color:var(--red);    border:1px solid rgba(200,16,46,.3); }
   .pos-C  { background:rgba(212,168,71,.12); color:var(--gold);   border:1px solid rgba(212,168,71,.3); }
   .pos-IF { background:rgba(90,155,255,.1);  color:#7ab3ff;       border:1px solid rgba(90,155,255,.25); }
   .pos-OF { background:rgba(72,195,110,.1);  color:#6bda92;       border:1px solid rgba(72,195,110,.25); }
+  /* NFL */
   .pos-QB   { background:rgba(200,16,46,.14);  color:var(--red);    border:1px solid rgba(200,16,46,.3); }
   .pos-RB   { background:rgba(45,179,79,.12);  color:var(--green);  border:1px solid rgba(45,179,79,.3); }
   .pos-WR   { background:rgba(90,155,255,.1);  color:#7ab3ff;       border:1px solid rgba(90,155,255,.25); }
@@ -95,15 +122,32 @@
   .pos-LB   { background:rgba(255,210,80,.1);  color:#f5d060;       border:1px solid rgba(255,210,80,.25); }
   .pos-CB   { background:rgba(255,120,180,.1); color:#f08abd;       border:1px solid rgba(255,120,180,.25); }
   .pos-S    { background:rgba(62,207,198,.1);  color:var(--teal);   border:1px solid rgba(62,207,198,.25); }
+  /* NHL */
+  .pos-hC { background:rgba(30,144,255,.14); color:var(--nhl-blue); border:1px solid rgba(30,144,255,.3); }
+  .pos-hW { background:rgba(62,207,198,.12); color:var(--teal);     border:1px solid rgba(62,207,198,.3); }
+  .pos-hD { background:rgba(212,168,71,.12); color:var(--gold);     border:1px solid rgba(212,168,71,.3); }
+  .pos-hG { background:rgba(200,16,46,.14);  color:var(--red);      border:1px solid rgba(200,16,46,.3); }
+  /* NBA */
+  .pos-bPG { background:rgba(45,179,79,.12);  color:var(--green);    border:1px solid rgba(45,179,79,.3); }
+  .pos-bSG { background:rgba(30,144,255,.14); color:var(--nhl-blue); border:1px solid rgba(30,144,255,.3); }
+  .pos-bSF { background:rgba(240,125,34,.12); color:var(--nba-orange); border:1px solid rgba(240,125,34,.3); }
+  .pos-bPF { background:rgba(155,114,207,.12);color:var(--purple);   border:1px solid rgba(155,114,207,.3); }
+  .pos-bC  { background:rgba(200,16,46,.14);  color:var(--red);      border:1px solid rgba(200,16,46,.3); }
+  /* Arrow */
   .toggle-arrow { width:28px; height:28px; display:flex; align-items:center; justify-content:center; border-radius:50%; border:1px solid var(--border); color:var(--muted); font-size:11px; transition:transform .25s, border-color .2s, color .2s; margin-left:auto; flex-shrink:0; }
-  .mlb-panel .pick.open .toggle-arrow { transform:rotate(180deg); border-color:var(--red);   color:var(--red); }
-  .nfl-panel  .pick.open .toggle-arrow { transform:rotate(180deg); border-color:var(--green); color:var(--green); }
+  .mlb-panel .pick.open .toggle-arrow { transform:rotate(180deg); border-color:var(--red);        color:var(--red); }
+  .nfl-panel  .pick.open .toggle-arrow { transform:rotate(180deg); border-color:var(--green);      color:var(--green); }
+  .nhl-panel  .pick.open .toggle-arrow { transform:rotate(180deg); border-color:var(--nhl-blue);   color:var(--nhl-blue); }
+  .nba-panel  .pick.open .toggle-arrow { transform:rotate(180deg); border-color:var(--nba-orange); color:var(--nba-orange); }
+  /* Write-up */
   .write-up-panel { max-height:0; overflow:hidden; transition:max-height .38s cubic-bezier(.4,0,.2,1); }
   .write-up-inner { padding:16px 24px 22px 84px; border-top:1px solid var(--border); }
   .write-up-inner p { font-family:'Instrument Sans',sans-serif; font-size:13.5px; line-height:1.78; color:#a8bcd2; max-width:820px; }
   .write-up-inner p + p { margin-top:12px; }
   .write-up-inner em { color:var(--cream); font-style:italic; }
+  .write-up-placeholder { font-family:'JetBrains Mono',monospace; font-size:11px; color:var(--muted); letter-spacing:1px; font-style:italic; }
   @keyframes fadeSlide { from{opacity:0;transform:translateY(10px)} to{opacity:1;transform:translateY(0)} }
+  /* Footer */
   footer { border-top:1px solid var(--border); padding:28px 48px; display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:14px; }
   footer p { font-family:'JetBrains Mono',monospace; font-size:10px; color:var(--muted); letter-spacing:1px; }
   .legend { display:flex; gap:18px; flex-wrap:wrap; }
@@ -119,20 +163,15 @@
 <body>
 
 <nav class="tab-nav">
-  <button class="tab-btn active" data-sport="mlb">
-    <span class="tab-sport">MLB</span>
-    <span>Mock Draft</span>
-  </button>
-  <button class="tab-btn" data-sport="nfl">
-    <span class="tab-sport">NFL</span>
-    <span>Mock Draft</span>
-  </button>
+  <button class="tab-btn active" data-sport="mlb"><span class="tab-sport">MLB</span><span>Mock Draft</span></button>
+  <button class="tab-btn" data-sport="nfl"><span class="tab-sport">NFL</span><span>Mock Draft</span></button>
+  <button class="tab-btn" data-sport="nhl"><span class="tab-sport">NHL</span><span>Mock Draft</span></button>
+  <button class="tab-btn" data-sport="nba"><span class="tab-sport">NBA</span><span>Mock Draft</span></button>
 </nav>
 
+<!-- MLB -->
 <div class="sport-panel mlb-panel visible" id="panel-mlb">
-  <header class="mlb-header">
-    <h1 class="mlb-title">Mock<br>2026 MLB<br>Draft</h1>
-  </header>
+  <header class="mlb-header"><h1 class="mlb-title">Mock<br>2026 MLB<br>Draft</h1></header>
   <div class="draft-board" id="mlb-board"></div>
   <footer>
     <p>&#169; 2026 Mock Draft Board &#8212; Projections only. Not affiliated with MLB.</p>
@@ -145,10 +184,9 @@
   </footer>
 </div>
 
+<!-- NFL -->
 <div class="sport-panel nfl-panel" id="panel-nfl">
-  <header class="nfl-header">
-    <h1 class="nfl-title">Mock<br>2026 NFL<br>Draft</h1>
-  </header>
+  <header class="nfl-header"><h1 class="nfl-title">Mock<br>2026 NFL<br>Draft</h1></header>
   <div class="draft-board" id="nfl-board"></div>
   <footer>
     <p>&#169; 2026 Mock Draft Board &#8212; Projections only. Not affiliated with NFL.</p>
@@ -156,7 +194,7 @@
       <div class="legend-item"><div class="legend-dot" style="background:var(--red)"></div>QB</div>
       <div class="legend-item"><div class="legend-dot" style="background:var(--green)"></div>RB</div>
       <div class="legend-item"><div class="legend-dot" style="background:#7ab3ff"></div>WR</div>
-      <div class="legend-item"><div class="legend-dot" style="background:var(--teal)"></div>TE / S</div>
+      <div class="legend-item"><div class="legend-dot" style="background:var(--teal)"></div>TE/S</div>
       <div class="legend-item"><div class="legend-dot" style="background:var(--gold)"></div>OL</div>
       <div class="legend-item"><div class="legend-dot" style="background:var(--orange)"></div>EDGE</div>
       <div class="legend-item"><div class="legend-dot" style="background:var(--purple)"></div>DT</div>
@@ -166,19 +204,50 @@
   </footer>
 </div>
 
+<!-- NHL -->
+<div class="sport-panel nhl-panel" id="panel-nhl">
+  <header class="nhl-header"><h1 class="nhl-title">Mock<br>2026 NHL<br>Draft</h1></header>
+  <div class="draft-board" id="nhl-board"></div>
+  <footer>
+    <p>&#169; 2026 Mock Draft Board &#8212; Projections only. Not affiliated with NHL. Draft order via Tankathon (current standings).</p>
+    <div class="legend">
+      <div class="legend-item"><div class="legend-dot" style="background:var(--nhl-blue)"></div>Center</div>
+      <div class="legend-item"><div class="legend-dot" style="background:var(--teal)"></div>Wing / F</div>
+      <div class="legend-item"><div class="legend-dot" style="background:var(--gold)"></div>Defense</div>
+      <div class="legend-item"><div class="legend-dot" style="background:var(--red)"></div>Goalie</div>
+    </div>
+  </footer>
+</div>
+
+<!-- NBA -->
+<div class="sport-panel nba-panel" id="panel-nba">
+  <header class="nba-header"><h1 class="nba-title">Mock<br>2026 NBA<br>Draft</h1></header>
+  <div class="draft-board" id="nba-board"></div>
+  <footer>
+    <p>&#169; 2026 Mock Draft Board &#8212; Projections only. Not affiliated with NBA. Lottery order approximate; final order determined May 2026.</p>
+    <div class="legend">
+      <div class="legend-item"><div class="legend-dot" style="background:var(--green)"></div>PG</div>
+      <div class="legend-item"><div class="legend-dot" style="background:var(--nhl-blue)"></div>SG</div>
+      <div class="legend-item"><div class="legend-dot" style="background:var(--nba-orange)"></div>SF</div>
+      <div class="legend-item"><div class="legend-dot" style="background:var(--purple)"></div>PF</div>
+      <div class="legend-item"><div class="legend-dot" style="background:var(--red)"></div>C</div>
+    </div>
+  </footer>
+</div>
+
 <script>
-/* ── TAB SWITCHING ── */
+/* ── TABS ── */
 document.querySelectorAll('.tab-btn').forEach(function(btn) {
   btn.addEventListener('click', function() {
     document.querySelectorAll('.tab-btn').forEach(function(b) { b.classList.remove('active'); });
     document.querySelectorAll('.sport-panel').forEach(function(p) { p.classList.remove('visible'); });
     btn.classList.add('active');
     document.getElementById('panel-' + btn.dataset.sport).classList.add('visible');
-    window.scrollTo({ top: 0, behavior: 'smooth' });
+    window.scrollTo({ top:0, behavior:'smooth' });
   });
 });
 
-/* ── SHARED CARD BUILDER ── */
+/* ── CARD BUILDER ── */
 function buildPickCard(p) {
   var card = document.createElement('div');
   var cls = 'pick';
@@ -186,37 +255,46 @@ function buildPickCard(p) {
   if (p.round === 'R1')  cls += ' r1-pick';
   if (p.round === 'PPI') cls += ' ppi-pick';
   if (p.round === 'CBA') cls += ' cb-pick';
+  if (p.forfeited)       cls += ' forfeited-pick';
   card.className = cls;
   card.style.animationDelay = Math.min((p.pick - 1) * 0.04, 1.2) + 's';
+
+  var writeupContent = p.writeup
+    ? p.writeup
+    : '<p class="write-up-placeholder">Write-up coming soon.</p>';
+
   card.innerHTML =
     '<div class="pick-header">' +
       '<div class="pick-num">' + p.pick + '</div>' +
       '<div><div class="player-name">' + p.name + '</div>' +
-      '<div class="player-meta">' + p.school + '</div></div>' +
+      (p.school ? '<div class="player-meta">' + p.school + '</div>' : '') +
+      '</div>' +
       '<div class="team-cell">' + p.team + '</div>' +
       '<div class="position pos-' + p.posClass + '">' + p.pos + '</div>' +
       '<div class="toggle-arrow">&#9660;</div>' +
     '</div>' +
-    '<div class="write-up-panel"><div class="write-up-inner">' + p.writeup + '</div></div>';
+    '<div class="write-up-panel"><div class="write-up-inner">' + writeupContent + '</div></div>';
 
-  var hdr   = card.querySelector('.pick-header');
-  var panel = card.querySelector('.write-up-panel');
-  hdr.addEventListener('click', function() {
-    if (card.classList.contains('open')) {
-      card.classList.remove('open');
-      panel.style.maxHeight = '0';
-    } else {
-      card.classList.add('open');
-      panel.style.maxHeight = panel.scrollHeight + 'px';
-      requestAnimationFrame(function() {
-        requestAnimationFrame(function() { panel.style.maxHeight = 'none'; });
-      });
-    }
-  });
+  if (!p.forfeited) {
+    var hdr   = card.querySelector('.pick-header');
+    var panel = card.querySelector('.write-up-panel');
+    hdr.addEventListener('click', function() {
+      if (card.classList.contains('open')) {
+        card.classList.remove('open');
+        panel.style.maxHeight = '0';
+      } else {
+        card.classList.add('open');
+        panel.style.maxHeight = panel.scrollHeight + 'px';
+        requestAnimationFrame(function() {
+          requestAnimationFrame(function() { panel.style.maxHeight = 'none'; });
+        });
+      }
+    });
+  }
   return card;
 }
 
-/* ══════════════ MLB DATA ══════════════ */
+/* ══ MLB DATA ══ */
 const ROUND_META = {
   R1:  { label:"Round 1",                            cls:"r1",   note:"" },
   PPI: { label:"Prospect Promotion Incentive Picks", cls:"rppi", note:"" },
@@ -241,19 +319,19 @@ const picks = [
     sources:"Baseball America · ESPN · Just Baseball · Puckett's Pond" },
 
   { pick:4, round:"R1", top:true,
-    name:"Jackson Flora", school:"UC Santa Barbara", type:"COL", pos:"RHP", posClass:"P", team:"San Francisco Giants",
-    writeup:`<p>The most electric arm in the draft class and a player rapidly climbing boards heading into spring. ESPN's McDaniel moved him to No. 4 overall in his first 2026 rankings, noting Flora "sat 96-99 and hit 100 mph with above-average shape/movement on the pitch, helped by almost 7 feet of extension; there's front-line potential if he continues like this and keeps throwing strikes." UCSB's Tyler Bremner went second overall in 2025; Flora has every chance to go higher. The 6'5" right-hander dominated his opening 2026 start over Southern Miss (6 IP, 0 R, 5 K) and then flashed his 70-grade fastball for 6 K's in 5 IP of one-run ball against Portland the following weekend. One scout told Baseball America: "You can draw some pretty clear lines between what he's capable of doing with a baseball to what some very big names in the sport right now are doing with a baseball... He has the potential to be a very high-end rotation piece."</p><p>This offseason, Flora added a kick changeup that Baseball America says "has scouts buzzing" and is already grading as a potential plus pitch. Combined with his sweeper — described as "one of the most dynamic breaking balls in the class" — a standard slider, and a mid-80s curve, he now features a deep four-pitch arsenal that MLB front offices crave. Federal Baseball's profile graded his fastball at 70 and noted he "only walked 2 batters per nine innings last season. That combination of stuff and command is the kind of thing that makes scouts drool." In 2025 he went 8-2 with a 3.60 ERA, 1.00 WHIP and 86 K in 75 IP. The knock is that UCSB doesn't face the strongest competition — but Sox Machine noted that even his C-game performance "still came with premium stuff."</p>`,
-    sources:"ESPN · Baseball America · Sox Machine · Federal Baseball" },
-
-  { pick:5, round:"R1", top:true,
-    name:"Drew Burress", school:"Georgia Tech", type:"COL", pos:"CF", posClass:"OF", team:"Pittsburgh Pirates",
+    name:"Drew Burress", school:"Georgia Tech", type:"COL", pos:"OF", posClass:"OF", team:"San Francisco Giants",
     writeup:`<p>The top college position player in the class who isn't a shortstop. The 5'9" Georgia Tech center fielder is undersized and takes what scouts call "a healthy hack" at the plate — but the production is impossible to ignore. Burress smashed 9 HR in his first 8 career college games and went deep 44 times across two seasons, 10th most in Georgia Tech program history and already only 13 shy of the school record. His .756 career slugging percentage is the best in program history for any hitter with 300+ at-bats, narrowly ahead of Mark Teixeira's .712. In 2025 alone he led the ACC in extra-base hits (43) and doubles (23), posting a 1.162 OPS with 62 RBI. He walked 111 times against 79 strikeouts over two college seasons and made contact on 92% of fastballs he saw. He is one of only two underclassmen nationally to earn back-to-back first-team All-American honors (per D1Baseball).</p><p>ESPN's McDaniel ranks him No. 5, calling it "an advanced bat with more thump than you'd expect from a 5-foot-9 hitter" that "overshadows a package of at least solid tools across the board." Just Baseball's detailed board describes "explosive bat speed from the right side of the plate with an affinity for hammering fastballs" and "a polished hit tool with feel to lift to the pull side with authority." The swing has a large leg kick and some drift in the load that introduces timing risk against off-speed down-and-away, and the 5'9" frame limits projectability. But the batting line answers any doubts: his .756 career slugging percentage nearly half a point better than the Georgia Tech legend who followed him to the majors.</p>`,
     sources:"ESPN · MLB Pipeline · SI · Just Baseball" },
 
-  { pick:6, round:"R1",
-    name:"Derek Curiel", school:"LSU", type:"COL", pos:"CF", posClass:"OF", team:"Kansas City Royals",
+  { pick:5, round:"R1", top:true,
+    name:"Derek Curiel", school:"LSU", type:"COL", pos:"OF", posClass:"OF", team:"Pittsburgh Pirates",
     writeup:`<p>The table-setter and leading hitter on LSU's 2025 national championship team, Curiel batted .345/.470/.519 with 20 doubles, 7 HR and 55 RBI in 68 games as a true freshman — the kind of freshman performance in the SEC that earns Christian Yelich comps, which is exactly what MLB.com's college all-prospect team gave him. Bleacher Report's winter big board ranks him No. 5 overall, citing his 60-grade hit tool as the best among all outfielders in the class. ESPN's McDaniel ranks him No. 6, noting "sometimes that combination [contact, medium power, center field] clicks quickly in pro ball and turns into someone like Mets OF Carson Benge."</p><p>Just Baseball's detailed scouting notes "a tranquil and rhythmic operation from the left side of the plate, staying in control throughout his load and consistently getting the bat to the baseball." He rarely whiffs, draws walks at a high clip, and uses the gaps effectively. The ceiling caveat is honest: "He doesn't have the bat speed and torque of his peers, which limits his overall ceiling" as a slugger. But his .470+ on-base percentage as an SEC freshman, a 60-grade hit tool, and a developing center field profile give him one of the most reliable offensive floors in the class. At 21.1 years old on draft day and a draft-eligible sophomore, he's one of the younger college players on the board.</p>`,
     sources:"ESPN · Bleacher Report · Just Baseball · MLB.com" },
+
+  { pick:6, round:"R1",
+    name:"Jacob Lombard", school:"Gulliver Prep (FL)", type:"HS", pos:"SS", posClass:"IF", team:"Kansas City Royals",
+    writeup:`<p>The younger brother of top Yankees prospect George Lombard Jr. and son of Tigers bench coach George Lombard. The 6'3", 185-pound Miami commit plays for the San Diego Padres Scout Team and entered the 2025 summer showcase circuit as a potential top-5 overall pick before an increase in swing-and-miss dampened his stock from its earlier highs. Bleacher Report's winter big board had him at No. 4 overall — the highest of any prep position player on their board at that time. MLB Pipeline's High School All-Prospect Team included him, calling him a player who "could be a plus hitter with plus pop in time at a premium position." His shortstop defense is smooth and controlled; scouts note "he makes things look easy."</p><p>He flashes genuine plus raw power and 70-grade run times that make him one of the most physically tooled prep bats in the class. The swing-and-miss concern is real — he can get overly aggressive early in counts and expand the zone chasing breaking balls. But as Baseball America's write-up notes, he "has all the skills to play short" and the pure upside remains elite. Several scouts still place him inside the top 10 on their private boards. For Detroit — a franchise comfortable taking developmental swings on high-ceiling prep talents, particularly those with connections to their organization — Lombard's combination of plus tools and shortstop profile makes him a fascinating late-first-round pick.</p>`,
+    sources:"MLB Pipeline · Baseball America · Bleacher Report" },
 
   { pick:7, round:"R1",
     name:"Cameron Flukey", school:"Coastal Carolina", type:"COL", pos:"RHP", posClass:"P", team:"Baltimore Orioles",
@@ -261,159 +339,191 @@ const picks = [
     sources:"ESPN · Sox Machine · Just Baseball · On3 · Bleacher Report" },
 
   { pick:8, round:"R1",
-    name:"Gio Rojas", school:"Stoneman Douglas HS (FL)", type:"HS", pos:"LHP", posClass:"P", team:"Athletics",
-    writeup:`<p>The consensus top prep arm in the 2026 class, a designation Rojas has held for most of the past two years. ESPN's McDaniel ranks him No. 8, and his description is telling: Rojas "is older for the class, but has four above-average pitches and has been a standout prospect for years, like Emerson." There is "some agreement in the industry that Rojas is the top prep arm" according to ESPN's prep pitching consensus. The 6'4", Miami commit brings a fastball up to 98 mph, a high-spin sweeping slider, a curveball, and a promising changeup from Parkland, Florida's storied Stoneman Douglas High School — the same program that produced Jordan Lawlar (2021, Pick 6).</p><p>He led Stoneman Douglas to a state championship and pitched for Team USA's 18U national team — both significant validations of his elite arm talent. MLB Pipeline's High School All-Prospect Team highlighted him as a top prep arm. The primary flag is his age — he is older for the prep class, which reduces projection but increases confidence in an already-advanced arsenal. Scouts who have tracked him through the entire showcase circuit consistently praise his strike-throwing and mound presence. His four-pitch mix is ahead of where most prep left-handers are at any age, and his Florida competitive environment means he has faced elite competition throughout his development.</p>`,
-    sources:"ESPN · MLB Pipeline · Baseball America" },
+    name:"Jackson Flora", school:"UC Santa Barbara", type:"COL", pos:"RHP", posClass:"P", team:"Athletics",
+    writeup:`<p>The most electric arm in the draft class and a player rapidly climbing boards heading into spring. ESPN's McDaniel moved him to No. 4 overall in his first 2026 rankings, noting Flora "sat 96-99 and hit 100 mph with above-average shape/movement on the pitch, helped by almost 7 feet of extension; there's front-line potential if he continues like this and keeps throwing strikes." UCSB's Tyler Bremner went second overall in 2025; Flora has every chance to go higher. The 6'5" right-hander dominated his opening 2026 start over Southern Miss (6 IP, 0 R, 5 K) and then flashed his 70-grade fastball for 6 K's in 5 IP of one-run ball against Portland the following weekend. One scout told Baseball America: "You can draw some pretty clear lines between what he's capable of doing with a baseball to what some very big names in the sport right now are doing with a baseball... He has the potential to be a very high-end rotation piece."</p><p>This offseason, Flora added a kick changeup that Baseball America says "has scouts buzzing" and is already grading as a potential plus pitch. Combined with his sweeper — described as "one of the most dynamic breaking balls in the class" — a standard slider, and a mid-80s curve, he now features a deep four-pitch arsenal that MLB front offices crave. Federal Baseball's profile graded his fastball at 70 and noted he "only walked 2 batters per nine innings last season. That combination of stuff and command is the kind of thing that makes scouts drool." In 2025 he went 8-2 with a 3.60 ERA, 1.00 WHIP and 86 K in 75 IP. The knock is that UCSB doesn't face the strongest competition — but Sox Machine noted that even his C-game performance "still came with premium stuff."</p>`,
+    sources:"ESPN · Baseball America · Sox Machine · Federal Baseball" },
 
   { pick:9, round:"R1",
-    name:"AJ Gracia", school:"Virginia", type:"COL", pos:"OF", posClass:"OF", team:"Atlanta Braves",
-    writeup:`<p>A Duke transfer who arrived at Virginia for the 2026 season and immediately announced his presence — three home runs in his first game as a Cavalier. Over two seasons at Duke, Gracia posted a 1.003 OPS with 29 HR, more walks than strikeouts, and 112 RBI, establishing himself as one of the premier power bats in college baseball. ESPN's McDaniel ranks him No. 9 overall, noting his swing can get "uphill at times" and he "likely shifts to a corner outfield spot, but there's real offensive upside that keeps him up here." Bleacher Report's winter big board placed him at No. 11 overall. MLB.com's college all-prospect team included him with a 60-power grade.</p><p>His profile is a power-first, professional-approach outfielder — the kind of bat that can carry a lineup regardless of defensive home. The swing's upward tendency introduces risk against advanced breaking balls low-and-away, and limited arm strength likely profiles him in left field at the next level. But his walk rate and patience give him real on-base upside to complement the power, and his 29 HR over two Duke seasons back up the raw power grades with actual production against ACC competition. ESPN McDaniel's consensus for his group of nine: "The feedback I got from scouts was to keep these nine players so far in the top group in some order" — a clear acknowledgment of his legitimate first-round floor.</p>`,
-    sources:"ESPN · Bleacher Report · MLB.com" },
+    name:"Carson Bolemon", school:"Southside Christian HS (SC)", type:"HS", pos:"LHP", posClass:"P", team:"Atlanta Braves",
+    writeup:`<p>The consensus No. 2 prep arm in the class behind Rojas, and arguably the most statistically dominant high school pitcher of the modern draft era. The Wake Forest commit from Simpsonville, South Carolina logged a 135-to-8 strikeout-to-walk ratio across 55.1 innings <em>without allowing a single earned run</em> as a prep junior — a line that is nearly impossible to comprehend. ESPN's McDaniel ranks him No. 16 overall, and his prep pitching consensus is explicit: "Some agreement in the industry that Rojas is the top prep arm, Bolemon is second." Bleacher Report's winter big board had him at No. 12 overall — the highest of any prep pitcher, slightly above even Rojas on their board.</p><p>Bolemon brings four pitches, clean mechanics for a high schooler, and natural mound presence. His ability to command multiple pitches while avoiding walks at an elite rate separates him from the typical high-variance prep arm. The only notable flag on his entire profile is an internal brace procedure in 8th grade — but he has been fully healthy since and scouts who have seen him this spring report no concerns whatsoever. Baseball America's Southeast coverage highlighted him as one of the top pitching prospects coming out of South Carolina in years. His Wake Forest commitment is considered genuine, and he may require above-slot money — but the combination of an elite strikeout rate, near-zero walk rate, and clean delivery make him as safe a prep arm as exists in this class.</p>`,
+    sources:"ESPN · Bleacher Report · Baseball America" },
 
   { pick:10, round:"R1",
-    name:"Liam Peterson", school:"Florida", type:"COL", pos:"RHP", posClass:"P", team:"Colorado Rockies",
+    name:"Vahn Lackey", school:"Georgia Tech", type:"COL", pos:"C", posClass:"C", team:"Colorado Rockies",
+    writeup:`<p>The best college catcher in the 2026 class and a player poised to become the fifth Georgia Tech backstop drafted in the first round. MLB.com's college all-prospect team included Lackey with the description "extremely athletic and continues to improve offensively and defensively." ESPN's McDaniel ranks him No. 15 overall — one of the 15 highest-ranked players in the class. Bleacher Report's winter big board had him No. 19 overall. He handled one of the country's best pitching staffs at Georgia Tech in 2025 while posting solid offensive numbers against ACC competition.</p><p>The combination of catching defense and offensive projection at the catcher position is rare — teams pay first-round premiums for any backstop who projects as a legitimate two-way player, and Lackey brings exactly that profile. His plus arm, above-average framing, and natural leadership behind the plate all grade favorably. His advanced game-calling ability is consistently praised by scouts who observed him with Georgia Tech's pitching staff throughout the year. For Arizona — a franchise with a need for a future cornerstone catcher given the current state of its catching depth — Lackey's complete package and ACC track record make him a natural first-round pick.</p>`,
+    sources:"ESPN · MLB.com · Bleacher Report" },
+
+  { pick:11, round:"R1",
+    name:"Liam Peterson", school:"Florida", type:"COL", pos:"RHP", posClass:"P", team:"Washington Nationals",
     writeup:`<p>The third member of the elite college pitching trio alongside Flora and Flukey, and one of the most intriguing starters available. Peterson opened 2026 with a dominant bounce-back outing against Kennesaw State: 5.1 IP, 1 H, 0 R, 2 BB, 12 K — his fourth double-digit strikeout performance dating back to 2025, a season in which he posted the third-highest single-season K/9 ratio (12.5) in Florida program history. MLB Pipeline's coverage noted "both breaking balls were sharp... consistently diving down and away from right-handed hitters." ESPN's McDaniel ranks him No. 15, noting that Bleacher Report's winter board had him at No. 6 — the widest gap of any prospect in the class between major services, reflecting genuine disagreement about his ceiling.</p><p>The 6'5" Florida native sits in the mid-to-upper 90s and operates with two distinct breaking balls — "a pair of breaking balls that both flashed above average, with sharp diving movement away from right-handers," per Sox Machine. FanGraphs' opening-day board acknowledges that Peterson "might have the best fastball/breaking ball combo in the draft" while also flagging that "his delivery is violent" — the primary durability concern that prevents him from locking up a top-5 spot. ESPN notes "the margins were hairpin thin between him, Flukey, and Flora for the top-ranked collegiate hurler spot on our preseason Top 100." His junior season will settle the debate.</p>`,
     sources:"ESPN · MLB Pipeline · FanGraphs · Bleacher Report · Sox Machine" },
 
-  { pick:11, round:"R1",
-    name:"Tyler Spangler", school:"De La Salle HS (CA)", type:"HS", pos:"SS", posClass:"IF", team:"Washington Nationals",
-    writeup:`<p>One of three elite prep shortstops in the 2026 class alongside Emerson and Maniscalco. The Stanford commit from Concord, California stands 6'3" and hit more home runs as a prep junior (10) than either Emerson or Lombard. ESPN's McDaniel ranks him No. 11. Bleacher Report's winter big board had him No. 9 — the highest of any prep position player outside the top-5 tier. MLB Pipeline's High School All-Prospect Team included Spangler, noting he "might profile better at the hot corner anyway" given his size, but acknowledging "solid tools across the board." FanGraphs described him as "talented enough to go high, though perhaps not high enough for him to sign" — a reference to his genuine Stanford commitment that could require a premium bonus.</p><p>His 55-hit/55-power offensive projection from a frame that scouts say still has physical projection gives him a reliable first-round floor. Multiple evaluators note there are "no glaring holes in his game" — the polish and reliability make him the safest bet of the three elite prep shortstops, even if he lacks the flashiest tools. De La Salle (CA) is one of the most respected prep programs in the country and consistently produces professional talent, giving his development context strong credibility. The Stanford commitment is considered genuine, but teams with later first-round picks and money to spend have historically been successful in flipping high-profile West Coast prep commitments.</p>`,
-    sources:"ESPN · MLB Pipeline · FanGraphs · Bleacher Report" },
-
   { pick:12, round:"R1",
-    name:"Rocco Maniscalco", school:"Oxford HS (AL)", type:"HS", pos:"SS", posClass:"IF", team:"Los Angeles Angels",
-    writeup:`<p>One of the most unique prospects in recent draft history. Maniscalco reclassified from 2027 to join this class, meaning he will be just 17.2 years old on draft day — one of the youngest elite prospects in the modern draft era. FanGraphs' updated rankings describe his "frame, lefty swing, and defensive actions" as "very exciting scouting components" even while acknowledging his showcase performance has been only "fair" (72% contact rate, sub-.700 OPS per Synergy Sports). ESPN's McDaniel ranks him No. 12, calling him "a sweet-swinging switch-hitting shortstop" who "has the look of a potential breakout guy who could join Emerson" in the top-5 discussion. Bleacher Report's winter big board had him No. 4 overall in the prep class.</p><p>The entire case for Maniscalco is youth and upside. Teams valuing projection above current performance will love the combination of his frame, his lefty swing, and his shortstop actions — what FanGraphs calls "very exciting scouting components." The Mississippi State commit plays at Oxford High School in Alabama, giving him a Southeast development context that scouts know well. His 2025 summer performance on the showcase circuit was divided: some scouts raved about the raw tools while others flagged the contact concerns. If the spring goes well and the contact improves, he could push into the top 8. For the Angels — a franchise that has prioritized premium prep talent in recent drafts — his ceiling and left-handed bat make him a compelling fit.</p>`,
-    sources:"ESPN · FanGraphs · Bleacher Report · Prep Baseball Report" },
+    name:"AJ Gracia", school:"Virginia", type:"COL", pos:"OF", posClass:"OF", team:"Los Angeles Angels",
+    writeup:`<p>A Duke transfer who arrived at Virginia for the 2026 season and immediately announced his presence — three home runs in his first game as a Cavalier. Over two seasons at Duke, Gracia posted a 1.003 OPS with 29 HR, more walks than strikeouts, and 112 RBI, establishing himself as one of the premier power bats in college baseball. ESPN's McDaniel ranks him No. 9 overall, noting his swing can get "uphill at times" and he "likely shifts to a corner outfield spot, but there's real offensive upside that keeps him up here." Bleacher Report's winter big board placed him at No. 11 overall. MLB.com's college all-prospect team included him with a 60-power grade.</p><p>His profile is a power-first, professional-approach outfielder — the kind of bat that can carry a lineup regardless of defensive home. The swing's upward tendency introduces risk against advanced breaking balls low-and-away, and limited arm strength likely profiles him in left field at the next level. But his walk rate and patience give him real on-base upside to complement the power, and his 29 HR over two Duke seasons back up the raw power grades with actual production against ACC competition. ESPN McDaniel's consensus for his group of nine: "The feedback I got from scouts was to keep these nine players so far in the top group in some order" — a clear acknowledgment of his legitimate first-round floor.</p>`,
+    sources:"ESPN · Bleacher Report · MLB.com" },
 
   { pick:13, round:"R1",
-    name:"Blake Bowen", school:"JSerra Catholic HS (CA)", type:"HS", pos:"CF", posClass:"OF", team:"St. Louis Cardinals",
-    writeup:`<p>An Oregon State commit and former two-sport (football) standout who committed to baseball full-time entering his senior season at JSerra Catholic in San Juan Capistrano, California. MLB Pipeline's High School All-Prospect Team praised Bowen explicitly: he "started showing he could make more contact and tap into his raw power on the summer showcase circuit" and "has the chance to have four plus tools in the future." Baseball America's prep class analysis noted that of the top prep outfielders, Bowen has "the most power." ESPN's McDaniel ranks him No. 13. Bleacher Report's winter big board had him No. 24 overall.</p><p>The 6'2" center fielder plays with explosive athleticism and a physical profile that scouts project to continue filling out. His showcase exit velocities ticked up significantly over the summer, and the combination of plus speed, an above-average arm, and emerging contact skills give him a genuine shot at four-plus tools down the road. JSerra Catholic is a well-known producer of professional baseball talent on the Southern California circuit. His Oregon State commitment appears genuine, but teams with mid-first-round picks have historically competed aggressively for California prep outfielders of this caliber, particularly those with Bowen's combination of raw athleticism and developing power.</p>`,
-    sources:"MLB Pipeline · Bleacher Report · ESPN · Baseball America" },
+    name:"Sawyer Strosnider", school:"TCU", type:"COL", pos:"OF", posClass:"OF", team:"St. Louis Cardinals",
+    writeup:`<p>MLB Pipeline's college all-prospect team described Strosnider as "one of the best all-around athletes in this class" with "double-plus raw power and plus speed." Bleacher Report's winter big board ranked him No. 10 overall — the highest of any outfielder outside the clear top-tier of Curiel and Burress. ESPN's McDaniel labels him a "power-over-hit type with a tweener defensive fit" but keeps him inside his top 25 for the sheer offensive upside and athleticism. Sox Machine's opening-week draft coverage noted TCU's Friday series against UCLA as one of the more heavily scouted events of opening weekend, with Strosnider and teammate Chase Brunson both drawing first-round interest.</p><p>His combination of double-plus raw power and plus speed is genuinely rare in the college outfield pool — most power hitters aren't also plus-plus runners. His fit in the outfield is "tweener" for a reason: his speed and arm could theoretically work in center, but the big swing and power-first approach most likely end up in a corner. For San Diego — a franchise in a short contention window with an immediate need for impact offensive talent — Strosnider's combination of present offensive upside and plus athleticism make him a compelling pick at 21, even accepting the hit-tool risk.</p>`,
+    sources:"ESPN · MLB Pipeline · Bleacher Report · Sox Machine" },
 
   { pick:14, round:"R1",
-    name:"Christopher Hacopian", school:"Texas A&M", type:"COL", pos:"SS", posClass:"IF", team:"Miami Marlins",
+    name:"Chris Hacopian", school:"Texas A&M", type:"COL", pos:"SS", posClass:"IF", team:"Miami Marlins",
     writeup:`<p>Widely considered to have the best hit/power combination among all college infielders in the draft outside of Cholowsky and Lebron. Prospects Live's board describes him as having "a double-plus contact tool and above-average power capabilities, with one of the best two-strike approaches in the nation" — arguably the most enthusiastic evaluation of any college hitter in the class. ESPN's McDaniel ranks him No. 14 overall, specifically calling out his hit-power combo as "the best of any college middle infielder." Texas A&M's baseball program has a strong track record of developing professional hitters, and Hacopian's SEC production backs up the raw tool grades with actual results.</p><p>The defensive projection is the key discussion point. Prospects Live believes he "may start his minor league career up the middle, but likely profiles best as a third baseman long-term." Most evaluators grade him as a second baseman or third baseman professionally, not a shortstop. ESPN's framing is direct: "Taking a corner infielder this high is risky, but Hacopian is a slam dunk hitting prospect." For Miami — a franchise rebuilding from the ground up and needing impact bats across the system — the combination of a plus hit tool, above-average power, and professional approach make him one of the most reliable offensive investments available at pick 14.</p>`,
     sources:"ESPN · Prospects Live · Baseball America · Bleacher Report" },
 
   { pick:15, round:"R1",
-    name:"Vahn Lackey", school:"Georgia Tech", type:"COL", pos:"C", posClass:"C", team:"Arizona Diamondbacks",
-    writeup:`<p>The best college catcher in the 2026 class and a player poised to become the fifth Georgia Tech backstop drafted in the first round. MLB.com's college all-prospect team included Lackey with the description "extremely athletic and continues to improve offensively and defensively." ESPN's McDaniel ranks him No. 15 overall — one of the 15 highest-ranked players in the class. Bleacher Report's winter big board had him No. 19 overall. He handled one of the country's best pitching staffs at Georgia Tech in 2025 while posting solid offensive numbers against ACC competition.</p><p>The combination of catching defense and offensive projection at the catcher position is rare — teams pay first-round premiums for any backstop who projects as a legitimate two-way player, and Lackey brings exactly that profile. His plus arm, above-average framing, and natural leadership behind the plate all grade favorably. His advanced game-calling ability is consistently praised by scouts who observed him with Georgia Tech's pitching staff throughout the year. For Arizona — a franchise with a need for a future cornerstone catcher given the current state of its catching depth — Lackey's complete package and ACC track record make him a natural first-round pick.</p>`,
-    sources:"ESPN · MLB.com · Bleacher Report" },
+    name:"Tyler Spangler", school:"De La Salle HS (CA)", type:"HS", pos:"SS", posClass:"IF", team:"Arizona Diamondbacks",
+    writeup:`<p>One of three elite prep shortstops in the 2026 class alongside Emerson and Maniscalco. The Stanford commit from Concord, California stands 6'3" and hit more home runs as a prep junior (10) than either Emerson or Lombard. ESPN's McDaniel ranks him No. 11. Bleacher Report's winter big board had him No. 9 — the highest of any prep position player outside the top-5 tier. MLB Pipeline's High School All-Prospect Team included Spangler, noting he "might profile better at the hot corner anyway" given his size, but acknowledging "solid tools across the board." FanGraphs described him as "talented enough to go high, though perhaps not high enough for him to sign" — a reference to his genuine Stanford commitment that could require a premium bonus.</p><p>His 55-hit/55-power offensive projection from a frame that scouts say still has physical projection gives him a reliable first-round floor. Multiple evaluators note there are "no glaring holes in his game" — the polish and reliability make him the safest bet of the three elite prep shortstops, even if he lacks the flashiest tools. De La Salle (CA) is one of the most respected prep programs in the country and consistently produces professional talent, giving his development context strong credibility. The Stanford commitment is considered genuine, but teams with later first-round picks and money to spend have historically been successful in flipping high-profile West Coast prep commitments.</p>`,
+    sources:"ESPN · MLB Pipeline · FanGraphs · Bleacher Report" },
 
   { pick:16, round:"R1",
-    name:"Carson Bolemon", school:"Southside Christian HS (SC)", type:"HS", pos:"LHP", posClass:"P", team:"Texas Rangers",
-    writeup:`<p>The consensus No. 2 prep arm in the class behind Rojas, and arguably the most statistically dominant high school pitcher of the modern draft era. The Wake Forest commit from Simpsonville, South Carolina logged a 135-to-8 strikeout-to-walk ratio across 55.1 innings <em>without allowing a single earned run</em> as a prep junior — a line that is nearly impossible to comprehend. ESPN's McDaniel ranks him No. 16 overall, and his prep pitching consensus is explicit: "Some agreement in the industry that Rojas is the top prep arm, Bolemon is second." Bleacher Report's winter big board had him at No. 12 overall — the highest of any prep pitcher, slightly above even Rojas on their board.</p><p>Bolemon brings four pitches, clean mechanics for a high schooler, and natural mound presence. His ability to command multiple pitches while avoiding walks at an elite rate separates him from the typical high-variance prep arm. The only notable flag on his entire profile is an internal brace procedure in 8th grade — but he has been fully healthy since and scouts who have seen him this spring report no concerns whatsoever. Baseball America's Southeast coverage highlighted him as one of the top pitching prospects coming out of South Carolina in years. His Wake Forest commitment is considered genuine, and he may require above-slot money — but the combination of an elite strikeout rate, near-zero walk rate, and clean delivery make him as safe a prep arm as exists in this class.</p>`,
-    sources:"ESPN · Bleacher Report · Baseball America" },
+    name:"Gio Rojas", school:"Stoneman Douglas HS (FL)", type:"HS", pos:"LHP", posClass:"P", team:"Texas Rangers",
+    writeup:`<p>The consensus top prep arm in the 2026 class, a designation Rojas has held for most of the past two years. ESPN's McDaniel ranks him No. 8, and his description is telling: Rojas "is older for the class, but has four above-average pitches and has been a standout prospect for years, like Emerson." There is "some agreement in the industry that Rojas is the top prep arm" according to ESPN's prep pitching consensus. The 6'4", Miami commit brings a fastball up to 98 mph, a high-spin sweeping slider, a curveball, and a promising changeup from Parkland, Florida's storied Stoneman Douglas High School — the same program that produced Jordan Lawlar (2021, Pick 6).</p><p>He led Stoneman Douglas to a state championship and pitched for Team USA's 18U national team — both significant validations of his elite arm talent. MLB Pipeline's High School All-Prospect Team highlighted him as a top prep arm. The primary flag is his age — he is older for the prep class, which reduces projection but increases confidence in an already-advanced arsenal. Scouts who have tracked him through the entire showcase circuit consistently praise his strike-throwing and mound presence. His four-pitch mix is ahead of where most prep left-handers are at any age, and his Florida competitive environment means he has faced elite competition throughout his development.</p>`,
+    sources:"ESPN · MLB Pipeline · Baseball America" },
 
   { pick:17, round:"R1",
-    name:"Eric Becker", school:"Virginia", type:"COL", pos:"SS", posClass:"IF", team:"Houston Astros",
-    writeup:`<p>A reliable two-way shortstop at one of college baseball's premier programs. Bleacher Report's winter big board ranked Becker No. 17 overall. ESPN's McDaniel also ranks him No. 17, grouping him with Tyler Bell as the top tier of the late-first-round college middle infield group. Virginia has produced a steady stream of first-round shortstops and middle infielders over the years, and Becker's profile fits the mold: advanced approach, professional feel for barreling the baseball, and above-average defense that gives him a clear defensive home at the next level.</p><p>He's not a loud offensive tool — more a "professional hitter who should move quickly through the minor leagues," as multiple boards consistently describe him. His above-average contact skills and solid plate discipline give him a legitimate everyday floor, even if the ceiling is more reliable contributor than impact star. For Houston — a franchise that has prioritized player development and fast-moving college players throughout the rebuild and now into contention — Becker's profile of polished college shortstop with a clear timeline and clear defensive home is exactly the organizational fit they've targeted in recent drafts.</p>`,
-    sources:"ESPN · Bleacher Report" },
-
-  { pick:18, round:"R1",
-    name:"Tyler Bell", school:"Kentucky", type:"COL", pos:"SS", posClass:"IF", team:"Cincinnati Reds",
-    writeup:`<p>ESPN's McDaniel ranks Bell No. 18 overall, pairing him with Becker as the two top college middle infielders in the late-first-round range. A Kentucky shortstop with above-average contact skills and emerging pull-side power, Bell brings a professional approach and polished feel for the strike zone to every at-bat. Bleacher Report's winter big board slots him in the late-first-round discussion alongside Becker. Multiple boards describe him as a professional hitter with a polished approach — the kind of college shortstop who has a clear, fast path to the big leagues regardless of where he ultimately lands defensively.</p><p>Bell is a proven performer in SEC country, having faced quality pitching throughout his Kentucky career and posted consistent offensive results. His season opener for the Wildcats generated positive early buzz among area scouts, and he is expected to be one of the more consistent producers in the college class through the spring. For Cincinnati — a franchise aggressively rebuilding through the draft and in need of a shortstop with a clear timeline — Bell's combination of polished offensive approach and solid defense makes him an ideal late-first-round selection at pick 18.</p>`,
-    sources:"ESPN · Bleacher Report" },
-
-  { pick:19, round:"R1",
-    name:"Logan Schmidt", school:"Ganesha HS (CA)", type:"HS", pos:"LHP", posClass:"P", team:"Cleveland Guardians",
-    writeup:`<p>An LSU commit and one of three elite prep southpaws in the 2026 class alongside Rojas and Bolemon. ESPN's prep pitching consensus places him third: "Some agreement in the industry that Rojas is the top prep arm, Bolemon is second, Schmidt is usually third." Multiple boards list him as the top prep arm in California and a legitimate first-round talent. He brings a projectable left-handed frame with natural arm action, clean delivery, and rare feel for a high school pitcher — attributes his Southern California development background and LSU commitment context confirm.</p><p>His velocity has ticked into the low-to-mid 90s during preseason outings, with projectable room to add more as his frame fills out under LSU's development program. His multi-pitch mix and strike-throwing ability separate him from the high-variance segment of the prep pitching pool. FanGraphs' updated rankings include him as a player with "genuine frontline starter upside" and legitimate projection. For Cleveland — a franchise that has developed pitching better than almost anyone in the game over the past decade, turning mid-round arms into contributors regularly — Schmidt's ceiling and LSU-or-pro decision make him a natural competitive balance target.</p>`,
-    sources:"ESPN · FanGraphs · MLB Pipeline" },
-
-  { pick:20, round:"R1",
-    name:"Ace Reese", school:"Mississippi State", type:"COL", pos:"3B", posClass:"IF", team:"Boston Red Sox",
+    name:"Ace Reese", school:"Mississippi State", type:"COL", pos:"3B", posClass:"IF", team:"Houston Astros",
     writeup:`<p>A power-first third baseman with one of the most impressive single-season home run totals in recent SEC history. Reese hit 21 HR in his first year at Mississippi State after transferring from Houston, earning a spot on MLB.com's college all-prospect team, which noted his "huge power that translated into 21 homers in his first season." Bleacher Report's winter big board had him at No. 15 overall — one of the highest placements for any non-shortstop, non-pitching college player. ESPN's McDaniel has him at No. 31, reflecting the wide disagreement between services on his overall value.</p><p>The scouting report is clear: genuine plus-plus raw power, a tweener defensive profile that most evaluators project at first or third base professionally, and a hit-tool question mark. The hit grades center on his chase rate and contact consistency against advanced secondary stuff, though his SEC production against high-end pitching provides real backing for the raw power numbers. For Boston — a franchise with a history of identifying and developing power-first college bats (J.D. Martinez-type profiles) — Reese's ceiling of a 30+ HR bat makes him an exciting late-first-round swing at pick 20.</p>`,
     sources:"MLB Pipeline · Bleacher Report · ESPN" },
 
-  { pick:21, round:"R1",
-    name:"Sawyer Strosnider", school:"TCU", type:"COL", pos:"OF", posClass:"OF", team:"San Diego Padres",
-    writeup:`<p>MLB Pipeline's college all-prospect team described Strosnider as "one of the best all-around athletes in this class" with "double-plus raw power and plus speed." Bleacher Report's winter big board ranked him No. 10 overall — the highest of any outfielder outside the clear top-tier of Curiel and Burress. ESPN's McDaniel labels him a "power-over-hit type with a tweener defensive fit" but keeps him inside his top 25 for the sheer offensive upside and athleticism. Sox Machine's opening-week draft coverage noted TCU's Friday series against UCLA as one of the more heavily scouted events of opening weekend, with Strosnider and teammate Chase Brunson both drawing first-round interest.</p><p>His combination of double-plus raw power and plus speed is genuinely rare in the college outfield pool — most power hitters aren't also plus-plus runners. His fit in the outfield is "tweener" for a reason: his speed and arm could theoretically work in center, but the big swing and power-first approach most likely end up in a corner. For San Diego — a franchise in a short contention window with an immediate need for impact offensive talent — Strosnider's combination of present offensive upside and plus athleticism make him a compelling pick at 21, even accepting the hit-tool risk.</p>`,
-    sources:"ESPN · MLB Pipeline · Bleacher Report · Sox Machine" },
+  { pick:18, round:"R1",
+    name:"Eric Becker", school:"Virginia", type:"COL", pos:"SS", posClass:"IF", team:"Cincinnati Reds",
+    writeup:`<p>A reliable two-way shortstop at one of college baseball's premier programs. Bleacher Report's winter big board ranked Becker No. 17 overall. ESPN's McDaniel also ranks him No. 17, grouping him with Tyler Bell as the top tier of the late-first-round college middle infield group. Virginia has produced a steady stream of first-round shortstops and middle infielders over the years, and Becker's profile fits the mold: advanced approach, professional feel for barreling the baseball, and above-average defense that gives him a clear defensive home at the next level.</p><p>He's not a loud offensive tool — more a "professional hitter who should move quickly through the minor leagues," as multiple boards consistently describe him. His above-average contact skills and solid plate discipline give him a legitimate everyday floor, even if the ceiling is more reliable contributor than impact star. For Houston — a franchise that has prioritized player development and fast-moving college players throughout the rebuild and now into contention — Becker's profile of polished college shortstop with a clear timeline and clear defensive home is exactly the organizational fit they've targeted in recent drafts.</p>`,
+    sources:"ESPN · Bleacher Report" },
 
-  { pick:22, round:"R1",
-    name:"Jacob Lombard", school:"Gulliver Prep (FL)", type:"HS", pos:"SS", posClass:"IF", team:"Detroit Tigers",
-    writeup:`<p>The younger brother of top Yankees prospect George Lombard Jr. and son of Tigers bench coach George Lombard. The 6'3", 185-pound Miami commit plays for the San Diego Padres Scout Team and entered the 2025 summer showcase circuit as a potential top-5 overall pick before an increase in swing-and-miss dampened his stock from its earlier highs. Bleacher Report's winter big board had him at No. 4 overall — the highest of any prep position player on their board at that time. MLB Pipeline's High School All-Prospect Team included him, calling him a player who "could be a plus hitter with plus pop in time at a premium position." His shortstop defense is smooth and controlled; scouts note "he makes things look easy."</p><p>He flashes genuine plus raw power and 70-grade run times that make him one of the most physically tooled prep bats in the class. The swing-and-miss concern is real — he can get overly aggressive early in counts and expand the zone chasing breaking balls. But as Baseball America's write-up notes, he "has all the skills to play short" and the pure upside remains elite. Several scouts still place him inside the top 10 on their private boards. For Detroit — a franchise comfortable taking developmental swings on high-ceiling prep talents, particularly those with connections to their organization — Lombard's combination of plus tools and shortstop profile makes him a fascinating late-first-round pick.</p>`,
-    sources:"MLB Pipeline · Baseball America · Bleacher Report" },
+  { pick:19, round:"R1",
+    name:"Tyler Bell", school:"Kentucky", type:"COL", pos:"SS", posClass:"IF", team:"Cleveland Guardians",
+    writeup:`<p>ESPN's McDaniel ranks Bell No. 18 overall, pairing him with Becker as the two top college middle infielders in the late-first-round range. A Kentucky shortstop with above-average contact skills and emerging pull-side power, Bell brings a professional approach and polished feel for the strike zone to every at-bat. Bleacher Report's winter big board slots him in the late-first-round discussion alongside Becker. Multiple boards describe him as a professional hitter with a polished approach — the kind of college shortstop who has a clear, fast path to the big leagues regardless of where he ultimately lands defensively.</p><p>Bell is a proven performer in SEC country, having faced quality pitching throughout his Kentucky career and posted consistent offensive results. His season opener for the Wildcats generated positive early buzz among area scouts, and he is expected to be one of the more consistent producers in the college class through the spring. For Cincinnati — a franchise aggressively rebuilding through the draft and in need of a shortstop with a clear timeline — Bell's combination of polished offensive approach and solid defense makes him an ideal late-first-round selection at pick 18.</p>`,
+    sources:"ESPN · Bleacher Report" },
 
-  { pick:23, round:"R1",
-    name:"Coleman Borthwick", school:"South Walton HS (FL)", type:"HS", pos:"RHP", posClass:"P", team:"Chicago Cubs",
-    writeup:`<p>An Auburn commit from Santa Rosa Beach, Florida who earns what ESPN describes as "the most universal support in the fifth spot at this point due to his two-way athleticism and strike-throwing." Bleacher Report's winter big board ranked him No. 22 overall and their pitching-specific list had him No. 4 among all pitchers. Baseball America's Southeast coverage highlighted him as one of the top arms coming out of the Florida Panhandle. The 6'6", 255-pound South Walton High School right-hander has a fastball touching 98 mph and a power slider with above-average command of both offerings.</p><p>ESPN's McDaniel notes he also projects as "a legitimate hitting prospect" even if you strip out the pitching value entirely — a genuine two-way player who chose to focus on pitching. His size, athleticism, and ability to throw strikes from a large frame give him a high floor that most prep right-handers can't match. The Auburn commitment appears genuine, and he will likely require above-slot bonus money to sign. For Chicago — a franchise with a documented track record of developing young pitching talent (Ben Brown, Jaxon Wiggins, among others) — Borthwick's combination of a 98 mph fastball, an advanced slider, and strike-throwing ability represents exactly the kind of prep arm their development system is built to maximize.</p>`,
-    sources:"ESPN · Bleacher Report · Baseball America" },
-
-  { pick:24, round:"R1",
-    name:"Caden Sorrell", school:"Texas A&M", type:"COL", pos:"OF", posClass:"OF", team:"Seattle Mariners",
-    writeup:`<p>ESPN's McDaniel ranks Sorrell No. 25, consistently pairing him with Strosnider as the two top college power bats in the outfield pool. Bleacher Report's winter big board slots him in the late-first-round discussion. A physical corner outfielder from Texas A&M with legitimate SEC production, Sorrell's swing is built to do damage — a true middle-of-the-order bat with a tweener defensive fit that most evaluators profile in left or right field. Just Baseball's college board describes the type: "power-over-hit with a tweener defensive fit" but with genuine impact potential that keeps him in the first round.</p><p>His Texas A&M production against SEC-caliber pitching is backed by real exit velocity data, giving credibility to the raw power grades. The hit tool is the variable that will define his ultimate ceiling — if his contact rates hold against advanced pitching this spring, he could push into the top 20. For Seattle — a franchise that has historically invested in pitching development and needs premium offensive talent across their system — Sorrell's power projection and SEC track record make him an intriguing dart at pick 24 with real upside if the bat develops as projected.</p>`,
-    sources:"ESPN · Bleacher Report · Just Baseball" },
-
-  { pick:25, round:"R1",
-    name:"Kevin Roberts Jr.", school:"Jackson Prep HS (MS)", type:"HS", pos:"CF", posClass:"OF", team:"Milwaukee Brewers",
-    writeup:`<p>One of the most athletic players in the entire 2026 class and the prep position player ranked highest by ESPN. McDaniel has him at No. 10 overall — significantly higher than where he falls in most other services' rankings — and his description is striking: a 70-grade run tool with "refined instincts on the basepaths and in the outfield." MLB Pipeline's High School All-Prospect Team agreed, listing him as a top prep outfielder and noting he has "the bat speed and strength to hit 20-plus homers a year" to go alongside his plus-plus speed. The Florida commit from Jackson Prep in Flowood, Mississippi has been evaluated extensively on the showcase circuit.</p><p>At 18.0 years old on draft day, he's one of the younger prep prospects in the first round, but his combination of plus-plus speed, emerging power potential, and advanced outfield instincts gives him the ceiling of a 20-20 player at the next level. For Milwaukee — a franchise that has consistently turned athletic outfielders (Lorenzo Cain, Christian Yelich during his tenure) into major league contributors — Roberts represents the kind of developmental upside they've mined repeatedly in recent drafts. His Florida commitment is considered genuine, but a late-first-round team willing to spend above slot could flip him.</p>`,
-    sources:"ESPN · MLB Pipeline" },
-
-  // ── PPI PICKS ─────────────────────────────────────────────────────────────
-  { pick:26, round:"PPI",
-    name:"Kaden Waechter", school:"Jesuit HS (FL)", type:"HS", pos:"RHP", posClass:"P", team:"Atlanta Braves",
-    writeup:`<p>Atlanta's Prospect Promotion Incentive pick, earned when Drake Baldwin won the NL Rookie of the Year Award. The son of former MLB pitcher Doug Waechter — who pitched parts of five seasons for Tampa Bay and Detroit — Kaden is one of two Florida prep right-handers projected inside the first 37 picks. Bleacher Report's pitching rankings list him No. 6 among all 2026 pitchers. MLB Pipeline's pitching-specific rankings also place him solidly in the first-round tier. He touches 96 mph from a projectable frame and brings advanced pitchability for a high schooler.</p><p>His Tampa Bay Jesuit High School background — one of Florida's most prestigious baseball programs — and his baseball bloodlines give him an unusually mature feel for the craft at a young age. Scouts who have tracked him describe his ability to work both sides of the plate, change speeds, and locate his fastball as well ahead of typical prep right-handers. His multi-pitch mix and above-average command separate him from the high-variance segment of the prep pitching pool. For Atlanta — a franchise that has consistently developed pitching prospects into contributors (Ian Anderson, Kyle Wright, Bryce Elder) — Waechter's combination of bloodlines, stuff, and pitchability make him an ideal PPI pick.</p>`,
-    sources:"Bleacher Report · MLB Pipeline · Prep Baseball Report" },
-
-  { pick:27, round:"PPI",
-    name:"Eric Booth Jr.", school:"Oak Grove HS (MS)", type:"HS", pos:"CF", posClass:"OF", team:"New York Mets",
-    writeup:`<p>New York's Prospect Promotion Incentive pick. MLB Pipeline's High School All-Prospect Team described Booth as "one of the fastest high school players in the class" with "refined instincts on the basepaths and in the outfield" and "the bat speed and strength to hit 20-plus homers a year." A Vanderbilt commit from Hattiesburg, Mississippi, Booth earns consistent comparisons to other high-ceiling prep outfielders for his combination of plus-plus speed and emerging power. Bleacher Report's winter big board had him at No. 28 overall — among the top prep outfielders in the class alongside Roberts and Bowen.</p><p>Baseball America's Southeast coverage identified Booth as one of the most exciting prep bats in Mississippi, a state that has quietly produced strong draft talent in recent cycles. His plus-plus run tool is the defining carrying attribute, but genuine bat speed gives him legitimate 20-20 upside at the next level — a projection that goes beyond just slapping singles and running. His Vanderbilt commitment is considered genuine, but teams drafting in the PPI range — where the bonus pool allows flexibility — often find that high-ceiling SEC commitments from Mississippi can be flipped with the right offer.</p>`,
-    sources:"MLB Pipeline · Bleacher Report · Baseball America" },
-
-  { pick:28, round:"PPI",
-    name:"Tyce Armstrong", school:"Baylor", type:"COL", pos:"1B", posClass:"IF", team:"Houston Astros",
-    writeup:`<p>Houston's Prospect Promotion Incentive pick, earned when Hunter Brown finished top-3 in AL Cy Young voting. Armstrong announced himself on Opening Day 2026 in the most remarkable fashion possible: he became only the <em>second player in NCAA history</em> to hit three grand slams in a single game, setting a Baylor school record with 12 RBI in one game against New Mexico — a feat that had not occurred since 1957. Sox Machine's opening-weekend draft report specifically highlighted the historic performance: "Here's a video of some College Baseball history... Baylor first baseman Tyce Armstrong hit three grand slams and became the first player to do that since 1957!" The report noted Armstrong as "a transfer from UT-Arlington pursuing his Master's degree at Baylor" — a redshirt senior with a mature, professional approach.</p><p>Armstrong is a left-handed bat with a 65-grade raw power evaluation from multiple services. The historic single-game performance has draft services scrambling to re-evaluate his profile entering the spring. His power-over-hit profile and first base defensive home limit his overall positional value — he's not going to provide defensive flexibility. But legitimate plus-plus raw power that shows up in games is rare at any level, and his three-grand-slam game provided the kind of dramatic evidence that changes draft boards overnight. For Houston — a franchise that has developed power bats like Yordan Alvarez from nothing — Armstrong's ceiling and professional maturity make him an ideal PPI pick.</p>`,
-    sources:"Sox Machine · MLB Pipeline" },
-
-  // ── COMPETITIVE BALANCE ROUND A ───────────────────────────────────────────
-  { pick:"CBA-1", round:"CBA",
-    name:"Chris Rembert", school:"Auburn", type:"COL", pos:"2B", posClass:"IF", team:"Cleveland Guardians",
+  { pick:20, round:"R1",
+    name:"Chris Rembert", school:"Auburn", type:"COL", pos:"2B", posClass:"IF", team:"Boston Red Sox",
     writeup:`<p>Bleacher Report's winter big board ranked Rembert No. 23 overall. MLB.com's college all-prospect team featured him prominently, noting he "owns one of the quickest bats in college baseball" and that "some evaluators believe he's the best pure hitter in the Draft" — a bold claim in a class with Cholowsky and Lebron. ESPN's McDaniel ranks him No. 28, and he earned a Team USA collegiate roster spot during the 2025 summer. He hit .344/.467/.555 with 10 HR and more walks than strikeouts for Auburn in 2025, serving as the Crimson Tide's offensive catalyst.</p><p>Just Baseball's college board describes "one of the quickest bats in college baseball" with a barrel rate and contact skills that translate to plus professional projections. His barrel rate and contact skills give him a legitimate .285-.300 floor in professional baseball, and the sneaky power — generated more by bat speed than raw strength — gives him gap-to-gap upside with 15-20 HR potential. For Cleveland — a franchise that has turned college bats (Steven Kwan, Will Brennan, Kyle Manzardo) into productive big leaguers more quickly than almost any organization — Rembert's combination of quick hands, plate discipline, and second-base defense makes him a natural organizational fit.</p>`,
     sources:"Bleacher Report · MLB.com · ESPN · Just Baseball" },
 
-  { pick:"CBA-2", round:"CBA",
-    name:"Gabe Gaeckle", school:"Arkansas", type:"COL", pos:"RHP", posClass:"P", team:"Kansas City Royals",
+  { pick:21, round:"R1",
+    name:"Logan Schmidt", school:"Ganesha HS (CA)", type:"HS", pos:"LHP", posClass:"P", team:"San Diego Padres",
+    writeup:`<p>An LSU commit and one of three elite prep southpaws in the 2026 class alongside Rojas and Bolemon. ESPN's prep pitching consensus places him third: "Some agreement in the industry that Rojas is the top prep arm, Bolemon is second, Schmidt is usually third." Multiple boards list him as the top prep arm in California and a legitimate first-round talent. He brings a projectable left-handed frame with natural arm action, clean delivery, and rare feel for a high school pitcher — attributes his Southern California development background and LSU commitment context confirm.</p><p>His velocity has ticked into the low-to-mid 90s during preseason outings, with projectable room to add more as his frame fills out under LSU's development program. His multi-pitch mix and strike-throwing ability separate him from the high-variance segment of the prep pitching pool. FanGraphs' updated rankings include him as a player with "genuine frontline starter upside" and legitimate projection. For Cleveland — a franchise that has developed pitching better than almost anyone in the game over the past decade, turning mid-round arms into contributors regularly — Schmidt's ceiling and LSU-or-pro decision make him a natural competitive balance target.</p>`,
+    sources:"ESPN · FanGraphs · MLB Pipeline" },
+
+  { pick:22, round:"R1",
+    name:"Caden Sorrell", school:"Texas A&M", type:"COL", pos:"OF", posClass:"OF", team:"Detroit Tigers",
+    writeup:`<p>ESPN's McDaniel ranks Sorrell No. 25, consistently pairing him with Strosnider as the two top college power bats in the outfield pool. Bleacher Report's winter big board slots him in the late-first-round discussion. A physical corner outfielder from Texas A&M with legitimate SEC production, Sorrell's swing is built to do damage — a true middle-of-the-order bat with a tweener defensive fit that most evaluators profile in left or right field. Just Baseball's college board describes the type: "power-over-hit with a tweener defensive fit" but with genuine impact potential that keeps him in the first round.</p><p>His Texas A&M production against SEC-caliber pitching is backed by real exit velocity data, giving credibility to the raw power grades. The hit tool is the variable that will define his ultimate ceiling — if his contact rates hold against advanced pitching this spring, he could push into the top 20. For Seattle — a franchise that has historically invested in pitching development and needs premium offensive talent across their system — Sorrell's power projection and SEC track record make him an intriguing dart at pick 24 with real upside if the bat develops as projected.</p>`,
+    sources:"ESPN · Bleacher Report · Just Baseball" },
+
+  { pick:23, round:"R1",
+    name:"Gabe Gaeckle", school:"Arkansas", type:"COL", pos:"RHP", posClass:"P", team:"Chicago Cubs",
     writeup:`<p>One of the most electric arms in the draft class from a pure stuff standpoint. Baseball America's college opening-day preview specifically identified Gaeckle as one of the pitchers capable of following recent examples of small-board risers becoming top-15 picks, given the right spring. Sox Machine's draft tracker listed him among the pitchers most likely to crack the top 15 with a breakout campaign. Bleacher Report's pitching board lists him No. 7 among all 2026 pitchers. He posted 149 strikeouts in 114 innings over two Arkansas seasons, operating as a setup arm and swingman behind the Razorbacks' marquee starters.</p><p>The 6'0", 190-pound right-hander has an upper-90s fastball with genuine carry and a plus slider that evaluators describe as "unhittable at times." The primary reliever concern stems from his undersized frame — most evaluators see a high-floor closing profile if the starter path doesn't materialize. But his pure swing-and-miss arsenal is among the best in the class at any size, and Arkansas' track record of developing professional arms (Kevin Kopps, Cody Scroggins, etc.) adds credibility to his development path. For Kansas City — a franchise rebuilt around pitching development and acquiring high-upside arms — Gaeckle's raw stuff is a natural competitive balance target.</p>`,
     sources:"Bleacher Report · Baseball America · Sox Machine" },
 
-  { pick:"CBA-3", round:"CBA",
-    name:"Aiden Ruiz", school:"The Stony Brook School (NY)", type:"HS", pos:"SS", posClass:"IF", team:"Arizona Diamondbacks",
-    writeup:`<p>Bleacher Report's winter big board ranked Ruiz No. 29 overall, calling him "arguably the top high school defender in the class." He manned shortstop for USA Baseball's 18U national team during the 2025 summer — one of the most significant validators available for a prep player, as USA Baseball evaluates hundreds of shortstops annually. ESPN's McDaniel mentions him among the prep shortstop pool beyond the top three (Emerson, Spangler, Maniscalco). His Stony Brook School (NY) background means he has faced less premier competition than Florida and Texas prep stars, but USA Baseball's selection process is rigorous enough that his inclusion carries real weight.</p><p>The defensive reputation is his calling card — scouts consistently describe his actions at short as among the best they've seen in the prep class, with exceptional instincts, hands, and footwork. The offensive profile is more developmental, with contact skills that evaluators project to improve as his frame fills out and he faces higher-quality pitching. For Arizona — a franchise that prizes up-the-middle defense and has successfully developed shortstops (Ketel Marte, Geraldo Perdomo) — Ruiz's defensive tools and shortstop ceiling make him an appealing competitive balance pick even acknowledging the offensive development required.</p>`,
-    sources:"Bleacher Report · ESPN" },
-
-  { pick:"CBA-4", round:"CBA",
-    name:"Tegan Kuhns", school:"Tennessee", type:"COL", pos:"RHP", posClass:"P", team:"St. Louis Cardinals",
+  { pick:24, round:"R1",
+    name:"Tegan Kuhns", school:"Tennessee", type:"COL", pos:"RHP", posClass:"P", team:"Seattle Mariners",
     writeup:`<p>Kuhns emerged as one of the draft's most prominent risers following a spectacular Cape Cod League summer in 2025: a 1.35 ERA and a 20-to-1 strikeout-to-walk ratio in 13.1 innings across three starts — one of the best Cape summers recorded by any 2026-eligible arm. Baseball America's preseason preview highlighted him. Sox Machine specifically named him as a pitcher capable of cracking the top 15 with a strong 2026 season. Bleacher Report's pitching board lists him No. 9 among all 2026 arms. He moved into a Friday starter role at Tennessee in 2026 on a loaded Volunteers pitching staff.</p><p>His command profile was inconsistent in a complementary 2025 college role, but the Cape performance suggested a different level when given regular extended opportunities. He brings a mid-90s fastball and a bat-missing slider, with scouts noting his stuff plays significantly better when fully stretched out as a starter rather than working in a limited leverage role. Tennessee's track record of sending arms to the draft at high value (Chase Dollander, No. 9 overall in 2024; Ben Joyce; Drew Beam) adds developmental credibility to his profile. For St. Louis — a franchise that has consistently developed SEC arms into major league contributors — Kuhns' rising stock and Tennessee pedigree make him a natural competitive balance target.</p>`,
     sources:"Bleacher Report · Baseball America · Sox Machine" },
 
-  { pick:"CBA-5", round:"CBA",
-    name:"Cole Young", school:"IMG Academy (FL)", type:"HS", pos:"SS", posClass:"IF", team:"Tampa Bay Rays",
-    writeup:`<p>This pick was acquired from the Baltimore Orioles as part of the Shane Baz trade. An advanced prep shortstop out of IMG Academy in Bradenton, Florida — one of the premier baseball development programs in the country — Young is praised for elite plate discipline and a mature, contact-first approach unusual for a high schooler. IMG Academy attracts elite prospects from across the nation and provides professional-caliber coaching and data that accelerates development timelines significantly. Multiple draft services list Young in the 25-35 overall range for his age-adjusted offensive feel and legitimate middle-infield defensive profile.</p><p>He's a left-handed bat with solid athleticism and the defensive actions to stick at shortstop long-term. His plate approach — walking at a high clip and making consistent contact — gives him a profile more similar to a polished college bat than a typical high schooler, which is the expected result of IMG Academy's program. For Tampa Bay — a franchise that has converted mid-round prep picks into productive big leaguers more consistently than any organization in baseball over the past decade — Young's combination of approach, athleticism, and shortstop tools make him an ideal competitive balance target. His selection here rewards the Rays for a strong organizational trade.</p>`,
-    sources:"Draft services · Prep Baseball Report" },
+  { pick:25, round:"R1",
+    name:"Eric Booth Jr.", school:"Oak Grove HS (MS)", type:"HS", pos:"OF", posClass:"OF", team:"Milwaukee Brewers",
+    writeup:`<p>New York's Prospect Promotion Incentive pick. MLB Pipeline's High School All-Prospect Team described Booth as "one of the fastest high school players in the class" with "refined instincts on the basepaths and in the outfield" and "the bat speed and strength to hit 20-plus homers a year." A Vanderbilt commit from Hattiesburg, Mississippi, Booth earns consistent comparisons to other high-ceiling prep outfielders for his combination of plus-plus speed and emerging power. Bleacher Report's winter big board had him at No. 28 overall — among the top prep outfielders in the class alongside Roberts and Bowen.</p><p>Baseball America's Southeast coverage identified Booth as one of the most exciting prep bats in Mississippi, a state that has quietly produced strong draft talent in recent cycles. His plus-plus run tool is the defining carrying attribute, but genuine bat speed gives him legitimate 20-20 upside at the next level — a projection that goes beyond just slapping singles and running. His Vanderbilt commitment is considered genuine, but teams drafting in the PPI range — where the bonus pool allows flexibility — often find that high-ceiling SEC commitments from Mississippi can be flipped with the right offer.</p>`,
+    sources:"MLB Pipeline · Bleacher Report · Baseball America" },
 
-  { pick:"CBA-6", round:"CBA",
-    name:"Will Brick", school:"Christian Brothers HS (TN)", type:"HS", pos:"C", posClass:"C", team:"Pittsburgh Pirates",
-    writeup:`<p>Bleacher Report's winter big board listed Brick at No. 31 overall, calling him "an astounding athlete with eye-opening metrics." MLB Pipeline's High School All-Prospect Team featured him as the top catcher in the class with this description: "A star for Team USA at the 18U World Cup, Brick then reclassified from 2027 to be a part of this class. He has real catch-and-throw skills to go along with a chance to hit for average with some thump." The Mississippi State commit reclassified from 2027 to join this class after his 18U World Cup performance, making his evaluation process significantly accelerated.</p><p>The 6'0", 200-pound right-handed hitter is one of the most complete prep catching prospects in recent memory. His framing, blocking, and plus arm strength all grade above-average, and his offensive profile — hit for average with emerging power — gives him a realistic shot at becoming an everyday catcher. Two-way catching prospects of his caliber and age (18.2 on draft day) are extraordinarily rare. For Pittsburgh — a franchise with a strong tradition of developing catchers and a clear organizational need for a catcher of the future — Brick's reclassification from 2027 represents exactly the kind of organizational prize that teams hunting in the competitive balance section dream of finding.</p>`,
+
+  // ── PPI PICKS ─────────────────────────────────────────────────────────────
+  { pick:26, round:"PPI",
+    note:"PPI pick — Drake Baldwin won the 2025 NL Rookie of the Year Award.",
+    name:"Joey Volchko", school:"Georgia", type:"COL", pos:"RHP", posClass:"P", team:"Atlanta Braves",
+    writeup:`<p>Atlanta's Prospect Promotion Incentive pick, earned when Drake Baldwin won the 2025 NL Rookie of the Year Award. One of college baseball's most electric arms from a pure stuff standpoint — a fastball that has touched 101 mph with the ability to cut or ride it depending on usage, paired with a sharp two-plane slider that evaluators describe as a legitimate 70-grade offering. The Georgia right-hander is built big at 6'4", 225 pounds, with a physical frame that gives the arsenal real downhill plane. Multiple scouts liken his profile to 2024 first-round pick Brody Brecht: enormous raw stuff, high-ceiling upside, but inconsistent command that must develop.</p><p>Bleacher Nation's 2026 mock notes his profile as "the physicality and pure stuff jump immediately" and projects him as a player who "could be one of the breakout stars of the 2026 season with a step forward in his command." For Atlanta — a franchise that just won a PPI pick and can target upside at this range — Volchko's 101 mph fastball and power slider represent exactly the kind of high-ceiling arm that can change an organization's ceiling with the right development.</p>`,
+    sources:"Bleacher Nation · MLB Pipeline · Bleacher Report" },
+
+  { pick:27, round:"PPI",
+    note:"First pick moved back 10 spots — Mets exceeded the top luxury-tax threshold.",
+    name:"Ryder Helfrick", school:"Arkansas", type:"COL", pos:"C", posClass:"C", team:"New York Mets",
+    writeup:`<p>New York's first pick, pushed back 10 spots to No. 27 as a CBT penalty for exceeding the luxury-tax threshold. Helfrick's development arc has been steep: he went undrafted out of high school, hit .179 in a limited freshman role at Arkansas, then broke out spectacularly — logging an .837 OPS with 11 HR in 36 Cape Cod League games, followed by a full sophomore season of .305/.420/.616 with 15 HR as a regular. Bleacher Nation's 2026 mock flagged him as a legitimate top-catcher contender: "He has real catch-and-throw skills to go along with a chance to hit for average with some thump."</p><p>Multiple evaluators describe Helfrick as one of the few catchers in the class capable of rivaling Georgia Tech's Vahn Lackey for top backstop honors. His framing, blocking, and plus arm all grade above average. The hit tool is backed by actual Cape and SEC production. For New York — a franchise that needs a potential franchise backstop — Helfrick's combination of defensive polish and emerging offensive profile makes him the right pick at this range regardless of the penalty context.</p>`,
+    sources:"Bleacher Report · Bleacher Nation · Baseball America" },
+
+  { pick:28, round:"PPI",
+    note:"PPI pick — Hunter Brown finished top-3 in 2025 AL Cy Young Award voting.",
+    name:"Blake Bowen", school:"JSerra Catholic HS (CA)", type:"HS", pos:"OF", posClass:"OF", team:"Houston Astros",
+    writeup:`<p>An Oregon State commit and former two-sport (football) standout who committed to baseball full-time entering his senior season at JSerra Catholic in San Juan Capistrano, California. MLB Pipeline's High School All-Prospect Team praised Bowen explicitly: he "started showing he could make more contact and tap into his raw power on the summer showcase circuit" and "has the chance to have four plus tools in the future." Baseball America's prep class analysis noted that of the top prep outfielders, Bowen has "the most power." ESPN's McDaniel ranks him No. 13. Bleacher Report's winter big board had him No. 24 overall.</p><p>The 6'2" center fielder plays with explosive athleticism and a physical profile that scouts project to continue filling out. His showcase exit velocities ticked up significantly over the summer, and the combination of plus speed, an above-average arm, and emerging contact skills give him a genuine shot at four-plus tools down the road. JSerra Catholic is a well-known producer of professional baseball talent on the Southern California circuit. His Oregon State commitment appears genuine, but teams with mid-first-round picks have historically competed aggressively for California prep outfielders of this caliber, particularly those with Bowen's combination of raw athleticism and developing power.</p>`,
+    sources:"MLB Pipeline · Bleacher Report · ESPN · Baseball America" },
+
+
+  // ── COMPETITIVE BALANCE ROUND A ───────────────────────────────────────────
+  { pick:"CBA-1", round:"CBA",
+    note:"CBA pick.",
+    name:"Gavin Grahovac", school:"Texas A&M", type:"COL", pos:"3B", posClass:"IF", team:"Cleveland Guardians",
+    writeup:`<p>Cleveland opens Competitive Balance Round A with one of the most explosive power bats in the college class. Grahovac hit a school freshman record 23 home runs at Texas A&M before a torn labrum cut his sophomore campaign short. He returned for 2026 and immediately announced himself: a 111 mph solo shot in his season opener, two HR and a pair of doubles in his first 16 plate appearances with no strikeouts. Bleacher Nation's draft coverage noted the performance directly: "Texas A&M's Gavin Grahovac's first at-bat? 111 mph solo shot. Yeah, I'm thinking he's back."</p><p>His gap-to-gap power is legitimate — the 111 mph exit velocity in his opening at-bat is not a fluke, and it follows a 23 HR freshman campaign that is difficult to dismiss. The primary concerns are durability (torn labrum surgery) and strikeout rate. But Bleacher Report places him squarely in the CBA range as a power bat with real impact potential. For Cleveland — a franchise that has developed offensive talent through their system — Grahovac's combination of plus-plus raw power and SEC track record makes him a natural competitive balance target.</p>`,
+    sources:"Bleacher Nation · Bleacher Report · Baseball America" },
+
+  { pick:"CBA-2", round:"CBA",
+    note:"CBA pick.",
+    name:"Aiden Robbins", school:"Texas", type:"COL", pos:"OF", posClass:"OF", team:"Kansas City Royals",
+    writeup:`<p>A power-hitting corner outfielder from the University of Texas who brings legitimate plus-plus raw power to a deep Royals system. Robbins hit for a loud slash line at Texas in the Big 12, profiling as a right fielder with the type of bat speed and strength that scouts prioritize when projecting offensive impact. Bleacher Report's winter big board included him in the late-CBA range for his combination of raw power and a compact, efficient swing. Multiple early 2026 mock drafts list him as an intriguing corner bat with 25+ HR upside.</p><p>His profile is power-over-hit — teams will need to see consistent contact rates against quality pitching. But the ceiling of a right-handed corner bat with legitimate 30 HR potential is exactly the type of upside teams target in the competitive balance range. For Kansas City — a franchise that successfully developed Bobby Witt Jr. and needs continued offensive depth — Robbins' combination of raw power and Big 12 track record makes him a natural competitive balance selection.</p>`,
     sources:"Bleacher Report · MLB Pipeline" },
 
+  { pick:"CBA-3", round:"CBA",
+    note:"CBA pick.",
+    name:"Maddox Molony", school:"Oregon", type:"COL", pos:"SS", posClass:"IF", team:"Arizona Diamondbacks",
+    writeup:`<p>Arizona's second competitive balance selection is a well-rounded college shortstop out of Oregon who has been a reliable bat in the Ducks' lineup for two seasons. Molony posted a career .314/.405/.569 slash line with 25 home runs — strong production from a Pac-12/Big Ten program. Baseball America's draft coverage described him as a pull-heavy hitter with bat-to-ball skills that translate to professional projections. Multiple mock drafts from late 2025 and early 2026 include him in the late-first-round/competitive-balance range for his defensive ability and offensive consistency.</p><p>Defensively, he has the range, arm, and footwork to stick at shortstop professionally. His offensive profile — good contact rates, emerging power, advanced approach — gives him one of the higher floors of any player available in the CBA range. MLB Pipeline's initial rankings placed him in the 25-35 overall range. For Arizona — a franchise that has successfully developed shortstops into major league contributors — Molony's all-around game and professional approach make him a sound competitive balance pick.</p>`,
+    sources:"Baseball America · MLB Pipeline · Bleacher Report" },
+
+  { pick:"CBA-4", round:"CBA",
+    note:"CBA pick.",
+    name:"Kevin Roberts Jr.", school:"Jackson Prep HS (MS)", type:"HS", pos:"OF", posClass:"OF", team:"St. Louis Cardinals",
+    writeup:`<p>One of the most athletic players in the entire 2026 class and the prep position player ranked highest by ESPN. McDaniel has him at No. 10 overall — significantly higher than where he falls in most other services' rankings — and his description is striking: a 70-grade run tool with "refined instincts on the basepaths and in the outfield." MLB Pipeline's High School All-Prospect Team agreed, listing him as a top prep outfielder and noting he has "the bat speed and strength to hit 20-plus homers a year" to go alongside his plus-plus speed. The Florida commit from Jackson Prep in Flowood, Mississippi has been evaluated extensively on the showcase circuit.</p><p>At 18.0 years old on draft day, he's one of the younger prep prospects in the first round, but his combination of plus-plus speed, emerging power potential, and advanced outfield instincts gives him the ceiling of a 20-20 player at the next level. For Milwaukee — a franchise that has consistently turned athletic outfielders (Lorenzo Cain, Christian Yelich during his tenure) into major league contributors — Roberts represents the kind of developmental upside they've mined repeatedly in recent drafts. His Florida commitment is considered genuine, but a late-first-round team willing to spend above slot could flip him.</p>`,
+    sources:"ESPN · MLB Pipeline" },
+
+  { pick:"CBA-5", round:"CBA",
+    note:"CBA pick — acquired from Baltimore Orioles.",
+    name:"Tommy LaPour", school:"TCU", type:"COL", pos:"RHP", posClass:"P", team:"Tampa Bay Rays",
+    writeup:`<p>Tampa Bay's competitive balance pick — acquired from Baltimore in the Shane Baz trade — is a TCU right-hander who brings a starter's arsenal and feel from one of college baseball's most respected programs. LaPour is a polished arm who has developed significantly during his time in Fort Worth, with a fastball that sits comfortably in the low-to-mid 90s and a three-pitch mix that includes an above-average slider and a workable changeup. TCU's track record of producing professional arms adds credibility to his development trajectory.</p><p>He doesn't have the explosive stuff of the top arms in the class, but his combination of strike-throwing, secondary pitches, and TCU pedigree give him a higher floor than most arms available in this range. Bleacher Report places him in the late-CBA tier as an arm with legitimate mid-rotation starter upside. For Tampa Bay — a franchise that has turned pitchers with similar profiles into reliable MLB contributors better than any organization in the sport — LaPour's combination of command, mix, and durability make him a natural Rays pick.</p>`,
+    sources:"Bleacher Report · Baseball America · MLB Pipeline" },
+
+  { pick:"CBA-6", round:"CBA",
+    note:"CBA pick.",
+    name:"Coleman Borthwick", school:"South Walton HS (FL)", type:"HS", pos:"RHP", posClass:"P", team:"Pittsburgh Pirates",
+    writeup:`<p>An Auburn commit from Santa Rosa Beach, Florida who earns what ESPN describes as "the most universal support in the fifth spot at this point due to his two-way athleticism and strike-throwing." Bleacher Report's winter big board ranked him No. 22 overall and their pitching-specific list had him No. 4 among all pitchers. Baseball America's Southeast coverage highlighted him as one of the top arms coming out of the Florida Panhandle. The 6'6", 255-pound South Walton High School right-hander has a fastball touching 98 mph and a power slider with above-average command of both offerings.</p><p>ESPN's McDaniel notes he also projects as "a legitimate hitting prospect" even if you strip out the pitching value entirely — a genuine two-way player who chose to focus on pitching. His size, athleticism, and ability to throw strikes from a large frame give him a high floor that most prep right-handers can't match. The Auburn commitment appears genuine, and he will likely require above-slot bonus money to sign. For Chicago — a franchise with a documented track record of developing young pitching talent (Ben Brown, Jaxon Wiggins, among others) — Borthwick's combination of a 98 mph fastball, an advanced slider, and strike-throwing ability represents exactly the kind of prep arm their development system is built to maximize.</p>`,
+    sources:"ESPN · Bleacher Report · Baseball America" },
+
   { pick:"CBA-7", round:"CBA",
-    name:"Jensen Hirschkorn", school:"Kingsburg HS (CA)", type:"HS", pos:"RHP", posClass:"P", team:"New York Yankees",
+    note:"First pick moved back 10 spots — Yankees exceeded the top luxury-tax threshold.",
+    name:"Aiden Ruiz", school:"The Stony Brook School (NY)", type:"HS", pos:"SS", posClass:"IF", team:"New York Yankees",
+    writeup:`<p>Bleacher Report's winter big board ranked Ruiz No. 29 overall, calling him "arguably the top high school defender in the class." He manned shortstop for USA Baseball's 18U national team during the 2025 summer — one of the most significant validators available for a prep player, as USA Baseball evaluates hundreds of shortstops annually. ESPN's McDaniel mentions him among the prep shortstop pool beyond the top three (Emerson, Spangler, Maniscalco). His Stony Brook School (NY) background means he has faced less premier competition than Florida and Texas prep stars, but USA Baseball's selection process is rigorous enough that his inclusion carries real weight.</p><p>The defensive reputation is his calling card — scouts consistently describe his actions at short as among the best they've seen in the prep class, with exceptional instincts, hands, and footwork. The offensive profile is more developmental, with contact skills that evaluators project to improve as his frame fills out and he faces higher-quality pitching. For Arizona — a franchise that prizes up-the-middle defense and has successfully developed shortstops (Ketel Marte, Geraldo Perdomo) — Ruiz's defensive tools and shortstop ceiling make him an appealing competitive balance pick even acknowledging the offensive development required.</p>`,
+    sources:"Bleacher Report · ESPN" },
+
+  { pick:"CBA-8", round:"CBA",
+    note:"First pick moved back 10 spots — Phillies exceeded the top luxury-tax threshold.",
+    name:"Jensen Hirschkorn", school:"Kingsburg HS (CA)", type:"HS", pos:"RHP", posClass:"P", team:"Philadelphia Phillies",
     writeup:`<p>An LSU commit from Kingsburg, California — a small San Joaquin Valley town about 25 miles southeast of Fresno — who earns consistent placement in the No. 4-5 range among prep right-handers in the class. ESPN's McDaniel ranks him No. 29 overall. Bleacher Report's pitching board lists him No. 5 among all 2026 right-handers specifically. Multiple draft services, including Bleacher Report and MLB Pipeline, place him in the 25-35 overall range. He offers genuine starter upside and physical projection from a frame that scouts have specifically called out as one of the more projectible prep pitcher frames in the West.</p><p>Scouts who have seen him describe above-average velocity with room to add significantly more as his frame develops under LSU's program — or even before, if he signs and enters a professional development system. His LSU commitment adds developmental credibility — the Tigers have an extraordinary recent track record of developing prep right-handers (Paul Skenes, Ty Floyd, among others). The Kingsburg, CA background suggests he may be more accessible financially than premium Texas or Florida prep arms. For New York — a franchise aggressively developing young pitching arms and with the financial resources to outbid clubs for attractive prep pitchers — Hirschkorn's ceiling and projectability make him a natural competitive balance fit.</p>`,
     sources:"ESPN · Bleacher Report · MLB Pipeline" },
 
-  { pick:"CBA-8", round:"CBA",
-    name:"Jacob Rudner", school:"North Carolina", type:"COL", pos:"RHP", posClass:"P", team:"Philadelphia Phillies",
-    writeup:`<p>A North Carolina right-hander who brings an unusually cerebral approach to pitching. In 2026, he publicly spoke with the NCAA's national coordinator of umpires about Trackman pitch-tracking technology and its implications for how pitchers are evaluated — a level of analytical engagement with the craft that resonates strongly with modern front offices. Baseball America's draft coverage has noted him specifically in their college preview material. On the mound, he brings a mid-90s fastball and a bat-missing slider with above-average command, operating within one of the ACC's most respected pitching programs.</p><p>His analytical approach to pitching — understanding how pitches play against different hitter types, using data to optimize his attack plan, and engaging actively with technology — gives him a profile that analytically-driven front offices prioritize. His command is the standout attribute: he consistently throws quality strikes and forces hitters to make weak contact even when his pure velocity grades aren't at the top of the class. For Philadelphia — a franchise that has invested heavily in pitch development and analytics, turning Ranger Suárez and others into premium starters through development — Rudner's combination of competitive stuff and intellectual engagement with the craft make him a compelling competitive balance pick.</p>`,
-    sources:"Baseball America" },
-
   { pick:"CBA-9", round:"CBA",
-    name:"Grayson Willoughby", school:"Oral Roberts", type:"COL", pos:"RHP", posClass:"P", team:"Colorado Rockies",
-    writeup:`<p>Colorado closes Competitive Balance Round A with an Oral Roberts right-hander who earned national recognition when MLB Pipeline featured him in a highlight reel in January 2026 — significant attention for an arm from outside the Power 4 spotlight. Willoughby is a power arm with a mid-90s fastball and a sharp breaking ball that have generated enough positive evaluations to land him on MLB Pipeline's radar and in the top-50 range of several draft services. Oral Roberts has a genuine tradition of producing professional-caliber pitching arms from a lower-profile setting, and Willoughby's metrics and stuff track in the right direction.</p><p>The mid-major background is simultaneously a challenge (weaker competition makes stuff grades harder to contextualize) and an opportunity (teams willing to look past conference prestige and focus on pure stuff can find tremendous value at this level). His 2026 non-conference schedule will be heavily scrutinized by scouts looking to validate his stuff grades against Power 4 competition. For Colorado — a franchise that desperately needs pitching depth at every level of the organization and has historically struggled to develop arms — Willoughby's combination of power stuff and projectable profile makes him an ideal swing pick at the final slot of Competitive Balance Round A.</p>`,
-    sources:"MLB Pipeline" },
+    note:"CBA pick.",
+    name:"Zion Rose", school:"Louisville", type:"COL", pos:"OF", posClass:"OF", team:"Colorado Rockies",
+    writeup:`<p>Colorado's competitive balance pick lands a Louisville Cardinal outfielder who checks the power-and-speed boxes the Rockies desperately need at every level of their system. Rose hit .310 with 13 HR and 67 RBI as a sophomore, logging 13 starts as DH alongside his regular left-field duties. FloBaseball's winter evaluation described his 2025 season as one of the more impressive outfield performances in the ACC, and multiple early 2026 mock drafts list him in the CBA range for his combination of raw power, athleticism, and emerging bat. Bleacher Report includes him as one of the more intriguing CBA prospects in the class.</p><p>His left-field defensive profile limits his overall positional value, but in Colorado's system, an athletic outfielder with 20+ HR potential and developing speed tools represents real organizational value. His Louisville production in the ACC provides solid context for the raw tool grades. For Colorado — a franchise that must develop power bats at every level — Rose's combination of power projection and athletic upside make him an appropriate competitive balance selection.</p>`,
+    sources:"FloBaseball · Bleacher Report · Baseball America" },
+
+  { pick:"CBA-10", round:"CBA",
+    note:"Second pick.",
+    name:"Ryan Lynch", school:"North Carolina", type:"COL", pos:"RHP", posClass:"P", team:"Colorado Rockies",
+    writeup:`<p>Colorado's second pick is a North Carolina right-hander who brings a polished, analytically-sophisticated approach to pitching from one of the ACC's most respected programs. Lynch has developed alongside future professional arms at UNC and benefits from a data-driven development infrastructure. Multiple evaluators describe his command as the standout attribute — he consistently locates quality strikes and forces weak contact even when pure velocity isn't at the top of the chart. Bleacher Report includes him as a secondary selection in their 40-pick mock.</p><p>He brings a mid-90s fastball and a bat-missing slider with an improving changeup that gives him a genuine three-pitch mix. His UNC background and analytical engagement with the craft give him a profile that modern front offices value. For Colorado — a franchise in desperate need of pitching depth — Lynch's combination of competitive stuff, command, and strong collegiate pedigree make him a sound pick to close out their two-pick draft run.</p>`,
+    sources:"Bleacher Report · Baseball America · MLB Pipeline" },
+
+  { pick:"CBA-11", round:"CBA",
+    note:"First pick moved back 10 spots — Blue Jays exceeded the top luxury-tax threshold.",
+    name:"Trevor Condon", school:"Etowah HS (GA)", type:"HS", pos:"OF", posClass:"OF", team:"Toronto Blue Jays",
+    writeup:`<p>Toronto's first pick, pushed back 10 spots to No. 39 as a CBT penalty. The Blue Jays land a Tennessee commit from Etowah High School in Woodstock, Georgia who may have the best combination of hitting ability and speed in the high school class. Bleacher Report's 2.0 mock describes him as having "the best combination of hitting ability and speed in the high school class," with MLB Pipeline drawing comparisons to Lenny Dykstra, Brett Gardner, and a stronger version of Sal Frelick — all elite contact hitters with premium speed. Multiple early 2026 mock drafts list him in the 25-39 range depending on power projection.</p><p>His combination of advanced approach, plus-plus speed, and rapidly improving raw power give him legitimate 20-20 upside. The Tennessee commitment is considered genuine, but Toronto — a franchise with a strong history of developing prep outfielders and the financial resources to compete for attractive prospects — is well-positioned here. For the Blue Jays — who need offensive upside across their system — Condon's athletic profile, contact skills, and premium speed make him an ideal penalty-range swing.</p>`,
+    sources:"Bleacher Report · Bleacher Nation · MLB Pipeline" },
+
+  { pick:"CBA-12", round:"CBA",
+    note:"First pick moved back 10 spots — Dodgers exceeded the top luxury-tax threshold.",
+    name:"Joseph Contreras", school:"Blessed Trinity Catholic HS (GA)", type:"HS", pos:"RHP", posClass:"P", team:"Los Angeles Dodgers",
+    writeup:`<p>Los Angeles lands their first pick at No. 40 — pushed back 10 spots as a CBT penalty — with a Georgia prep right-hander from Blessed Trinity Catholic High School in Roswell. Contreras possesses one of the better pure arms in the prep class, with a lively fastball that already sits in the mid-90s from a projectable frame that scouts believe has room to add velocity. Multiple evaluators note his feel for pitching is unusually advanced for a high schooler, giving him a higher floor than typical prep right-handers.</p><p>His combination of present velocity, projectable frame, and pitching IQ make him one of the most appealing prep arms available at this range. The Dodgers — who have turned prep pitching prospects into major league contributors better than almost any franchise in recent years — have the player development infrastructure to maximize Contreras' considerable ceiling. Bleacher Report's 2.0 mock specifically closes their 40-pick board with him as a player whose "arm talent could turn him into a legitimate middle-rotation starter" under the right developmental program.</p>`,
+    sources:"Bleacher Report · MLB Pipeline" },
+
 ];
 
-/* ══════════════ MLB BOARD BUILD ══════════════ */
 (function() {
   var board = document.getElementById('mlb-board');
   var lastRound = null;
@@ -430,7 +540,7 @@ const picks = [
   });
 })();
 
-/* ══════════════ NFL DATA ══════════════ */
+/* ══ NFL DATA ══ */
 const nflPicks = [
   { pick:1, top:true,
     name:"Fernando Mendoza", school:"Indiana", pos:"QB", posClass:"QB", team:"Las Vegas Raiders",
@@ -561,7 +671,6 @@ const nflPicks = [
     writeup:`<p>Super Bowl champion Seattle picks last and uses the selection to shore up a secondary that will lose cornerback depth in free agency entering 2026 — Coby Bryant, Tariq Woolen, and Joshua Jobe are all playing on expiring deals. Terrell is a 6'0" Clemson corner who improved his PFF overall grade in each of the past two seasons and has proven to be a willing run defender, earning an <em>86.4 PFF run-defense grade</em> in 2025 — outstanding for a corner and a trait new Seahawks general manager John Schneider has specifically prioritized in his defensive backs. Terrell's technical improvement across his college career suggests further development at the next level.</p><p>PFF's mock draft specifically projects Terrell to Seattle in the late first round, noting his trajectory and willingness as a run defender make him an ideal fit for a Seahawks secondary that lost top depth. Winning the Super Bowl gives Seattle a stable foundation but the roster needs to be maintained — and adding a quality cornerback on a four-year rookie deal secures that depth for a championship window that is very much open.</p>` },
 ];
 
-/* ══════════════ NFL BOARD BUILD ══════════════ */
 (function() {
   var board = document.getElementById('nfl-board');
   var rh = document.createElement('div');
@@ -569,6 +678,94 @@ const nflPicks = [
   rh.innerHTML = '<div class="round-label nfl-r1">Round 1</div><div class="round-line"></div>';
   board.appendChild(rh);
   nflPicks.forEach(function(p) { board.appendChild(buildPickCard(p)); });
+})();
+
+/* ══ NHL DATA ══ */
+const nhlPicks = [
+  { pick:1,  top:true,  name:"Ivar Stenberg",      school:"Frölunda HC — SHL",              pos:"LW/RW", posClass:"hW", team:"Vancouver Canucks",               writeup:`` },
+  { pick:2,  top:true,  name:"Gavin McKenna",       school:"Penn State — NCAA",               pos:"LW",    posClass:"hW", team:"St. Louis Blues",                  writeup:`` },
+  { pick:3,  top:true,  name:"Keaton Verhoeff",     school:"North Dakota — NCAA",             pos:"RD",    posClass:"hD", team:"New York Rangers",                 writeup:`` },
+  { pick:4,  top:true,  name:"Tynan Lawrence",      school:"Boston University — NCAA",        pos:"C",     posClass:"hC", team:"Calgary Flames (via VGK)",          writeup:`` },
+  { pick:5,             name:"Chase Reid",          school:"Soo Greyhounds — OHL",            pos:"RD",    posClass:"hD", team:"Winnipeg Jets",                    writeup:`` },
+  { pick:6,             name:"Caleb Malhotra",      school:"Brantford Bulldogs — OHL",        pos:"C",     posClass:"hC", team:"Chicago Blackhawks (via FLA)",      writeup:`` },
+  { pick:7,             name:"Ethan Belchetz",      school:"Windsor Spitfires — OHL",         pos:"LW",    posClass:"hW", team:"New Jersey Devils",                writeup:`` },
+  { pick:8,             name:"Alberts Smits",       school:"Jukurit — Liiga",                 pos:"LD",    posClass:"hD", team:"Nashville Predators",              writeup:`` },
+  { pick:9,             name:"Carson Carels",       school:"Prince George Cougars — WHL",     pos:"LD",    posClass:"hD", team:"San Jose Sharks",                  writeup:`` },
+  { pick:10,            name:"Viggo Björck",        school:"Djurgårdens IF — SHL",            pos:"C/RW",  posClass:"hC", team:"Florida Panthers",                 writeup:`` },
+  { pick:11,            name:"Ryan Lin",            school:"Vancouver Giants — WHL",           pos:"RD",    posClass:"hD", team:"Los Angeles Kings",                writeup:`` },
+  { pick:12,            name:"Daxon Rudolph",       school:"Prince Albert Raiders — WHL",     pos:"RD",    posClass:"hD", team:"Philadelphia Flyers",              writeup:`` },
+  { pick:13,            name:"Adam Novotný",        school:"Peterborough Petes — OHL",        pos:"LW/RW", posClass:"hW", team:"Washington Capitals",              writeup:`` },
+  { pick:14,            name:"Oliver Suvanto",      school:"Tappara — Liiga",                 pos:"C",     posClass:"hC", team:"Boston Bruins (via TOR)",           writeup:`` },
+  { pick:15,            name:"Pick Forfeited",      school:"",                                pos:"—",     posClass:"hW", team:"Ottawa Senators",                  writeup:``, forfeited:true },
+  { pick:16,            name:"Xavier Villeneuve",   school:"Blainville-Boisbriand — QMJHL",  pos:"LD",    posClass:"hD", team:"Columbus Blue Jackets",            writeup:`` },
+  { pick:17,            name:"Oscar Hemming",       school:"Boston College — NCAA",           pos:"F",     posClass:"hW", team:"San Jose Sharks (via EDM)",         writeup:`` },
+  { pick:18,            name:"Elton Hermansson",    school:"MoDo Hockey — HA",                pos:"RW/LW", posClass:"hW", team:"Utah Mammoth",                     writeup:`` },
+  { pick:19,            name:"Marcus Nordmark",     school:"Djurgårdens IF — U20",            pos:"RW",    posClass:"hW", team:"Anaheim Ducks",                    writeup:`` },
+  { pick:20,            name:"Malte Gustafsson",    school:"HV71 — U20 Nationell",            pos:"LD",    posClass:"hD", team:"Seattle Kraken",                   writeup:`` },
+  { pick:21,            name:"JP Hurlbert",         school:"Kamloops Blazers — WHL",          pos:"F",     posClass:"hW", team:"New York Islanders",               writeup:`` },
+  { pick:22,            name:"Juho Piiparinen",     school:"Tappara — Liiga",                 pos:"RD",    posClass:"hD", team:"Boston Bruins",                    writeup:`` },
+  { pick:23,            name:"Yegor Shilov",        school:"Victoriaville Tigres — QMJHL",   pos:"C",     posClass:"hC", team:"Buffalo Sabres",                   writeup:`` },
+  { pick:24,            name:"Mathis Preston",      school:"Vancouver Giants — WHL",           pos:"F",     posClass:"hW", team:"Detroit Red Wings",                writeup:`` },
+  { pick:25,            name:"Ilya Morozov",        school:"Miami (Ohio) — NCAA",             pos:"F",     posClass:"hW", team:"Pittsburgh Penguins",              writeup:`` },
+  { pick:26,            name:"Nikita Klepov",       school:"Saginaw Spirit — OHL",            pos:"F",     posClass:"hW", team:"Montreal Canadiens",               writeup:`` },
+  { pick:27,            name:"William Håkansson",   school:"Luleå HF — SHL",                  pos:"LD",    posClass:"hD", team:"Vancouver Canucks (via MIN)",       writeup:`` },
+  { pick:28,            name:"Ryan Roobroeck",      school:"Niagara IceDogs — OHL",           pos:"C",     posClass:"hC", team:"New York Rangers (via DAL)",        writeup:`` },
+  { pick:29,            name:"Maddox Dagenais",     school:"Quebec Remparts — QMJHL",        pos:"C",     posClass:"hC", team:"Calgary Flames (via VGK)",          writeup:`` },
+  { pick:30,            name:"Alexander Command",   school:"Örebro HK — U20 Nationell",      pos:"C",     posClass:"hC", team:"Carolina Hurricanes",              writeup:`` },
+  { pick:31,            name:"Giorgos Pantelas",    school:"Brandon Wheat Kings — WHL",      pos:"RD",    posClass:"hD", team:"Seattle Kraken (via TB)",           writeup:`` },
+  { pick:32,            name:"Brooks Rogowski",     school:"Oshawa Generals — OHL",          pos:"C",     posClass:"hC", team:"New York Islanders (via COL)",      writeup:`` },
+];
+
+(function() {
+  var board = document.getElementById('nhl-board');
+  var rh = document.createElement('div');
+  rh.className = 'round-header';
+  rh.innerHTML = '<div class="round-label nhl-r1">Round 1</div><div class="round-line"></div>';
+  board.appendChild(rh);
+  nhlPicks.forEach(function(p) { board.appendChild(buildPickCard(p)); });
+})();
+
+/* ══ NBA DATA ══ */
+const nbaPicks = [
+  { pick:1,  top:true,  name:"Darryn Peterson",    school:"Kansas — Freshman",               pos:"SG",    posClass:"bSG", team:"Atlanta Hawks (via NOP)",           writeup:`` },
+  { pick:2,  top:true,  name:"AJ Dybantsa",        school:"BYU — Freshman",                  pos:"SF",    posClass:"bSF", team:"Washington Wizards",               writeup:`` },
+  { pick:3,  top:true,  name:"Cameron Boozer",     school:"Duke — Freshman",                 pos:"PF",    posClass:"bPF", team:"Dallas Mavericks",                 writeup:`` },
+  { pick:4,  top:true,  name:"Caleb Wilson",       school:"North Carolina — Freshman",       pos:"PF",    posClass:"bPF", team:"Brooklyn Nets",                    writeup:`` },
+  { pick:5,  top:true,  name:"Kingston Flemings",  school:"Houston — Freshman",              pos:"PG",    posClass:"bPG", team:"Sacramento Kings",                 writeup:`` },
+  { pick:6,             name:"Keaton Wagler",      school:"Illinois — Freshman",             pos:"SG",    posClass:"bSG", team:"LA Clippers (via IND)",             writeup:`` },
+  { pick:7,             name:"Mikel Brown Jr.",    school:"Louisville — Freshman",           pos:"PG",    posClass:"bPG", team:"Utah Jazz",                         writeup:`` },
+  { pick:8,             name:"Nate Ament",         school:"Tennessee — Freshman",            pos:"SF",    posClass:"bSF", team:"Memphis Grizzlies",                writeup:`` },
+  { pick:9,             name:"Jayden Quaintance",  school:"Kentucky — Freshman",             pos:"PF",    posClass:"bPF", team:"Milwaukee Bucks",                  writeup:`` },
+  { pick:10,            name:"Hannes Steinbach",   school:"Washington (Germany) — Int'l",    pos:"C",     posClass:"bC",  team:"Chicago Bulls",                    writeup:`` },
+  { pick:11,            name:"Braylon Mullins",    school:"UConn — Freshman",                pos:"SG",    posClass:"bSG", team:"San Antonio Spurs (via ATL)",       writeup:`` },
+  { pick:12,            name:"Koa Peat",           school:"Arizona — Freshman",              pos:"PF",    posClass:"bPF", team:"Charlotte Hornets",                writeup:`` },
+  { pick:13,            name:"Chris Cenac Jr.",    school:"Houston — Junior",                pos:"PF",    posClass:"bPF", team:"OKC Thunder (via LAC)",             writeup:`` },
+  { pick:14,            name:"Darius Acuff Jr.",   school:"Arkansas — Freshman",             pos:"PG",    posClass:"bPG", team:"Portland Trail Blazers",           writeup:`` },
+  { pick:15,            name:"Brayden Burries",    school:"Arizona — Freshman",              pos:"SG",    posClass:"bSG", team:"Miami Heat",                       writeup:`` },
+  { pick:16,            name:"Cameron Carr",       school:"Baylor — Sophomore",              pos:"SG",    posClass:"bSG", team:"Golden State Warriors",            writeup:`` },
+  { pick:17,            name:"Labaron Philon",     school:"Alabama — Sophomore",             pos:"PG",    posClass:"bPG", team:"Memphis Grizzlies (via ORL)",       writeup:`` },
+  { pick:18,            name:"Thomas Haugh",       school:"Florida — Freshman",              pos:"SF",    posClass:"bSF", team:"OKC Thunder (via PHI)",             writeup:`` },
+  { pick:19,            name:"Karim Lopez",        school:"NZ Breakers — Int'l",             pos:"SF",    posClass:"bSF", team:"Charlotte Hornets (via PHX)",       writeup:`` },
+  { pick:20,            name:"Bennett Stirtz",     school:"Iowa — Senior",                   pos:"PG",    posClass:"bPG", team:"Toronto Raptors",                  writeup:`` },
+  { pick:21,            name:"Amari Allen",        school:"Alabama — Freshman",              pos:"SF",    posClass:"bSF", team:"Detroit Pistons (via MIN)",          writeup:`` },
+  { pick:22,            name:"Patrick Ngongba II", school:"Duke — Freshman",                 pos:"C",     posClass:"bC",  team:"Los Angeles Lakers",               writeup:`` },
+  { pick:23,            name:"Aday Mara",          school:"Michigan — Sophomore",            pos:"C",     posClass:"bC",  team:"Atlanta Hawks (via CLE)",           writeup:`` },
+  { pick:24,            name:"Yaxel Lendeborg",    school:"Michigan — Senior",               pos:"PF",    posClass:"bPF", team:"Philadelphia 76ers (via HOU)",      writeup:`` },
+  { pick:25,            name:"Isaiah Evans",       school:"Duke — Freshman",                 pos:"SF",    posClass:"bSF", team:"Denver Nuggets",                   writeup:`` },
+  { pick:26,            name:"Henri Veesaar",      school:"North Carolina — Sophomore",      pos:"C",     posClass:"bC",  team:"Cleveland Cavaliers",              writeup:`` },
+  { pick:27,            name:"Christian Anderson", school:"Texas Tech — Freshman",           pos:"PG",    posClass:"bPG", team:"New York Knicks",                  writeup:`` },
+  { pick:28,            name:"Meleek Thomas",      school:"Arkansas — Freshman",             pos:"SG",    posClass:"bSG", team:"Minnesota Timberwolves",           writeup:`` },
+  { pick:29,            name:"Dame Sarr",          school:"Duke — Freshman",                 pos:"SG",    posClass:"bSG", team:"Boston Celtics",                   writeup:`` },
+  { pick:30,            name:"Tounde Yessoufou",   school:"Baylor — Sophomore",              pos:"SF",    posClass:"bSF", team:"OKC Thunder",                      writeup:`` },
+];
+
+(function() {
+  var board = document.getElementById('nba-board');
+  var rh = document.createElement('div');
+  rh.className = 'round-header';
+  rh.innerHTML = '<div class="round-label nba-r1">Round 1</div><div class="round-line"></div>';
+  board.appendChild(rh);
+  nbaPicks.forEach(function(p) { board.appendChild(buildPickCard(p)); });
 })();
 
 </script>
